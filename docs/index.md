@@ -14,7 +14,6 @@ date-meta: 20 March 2023
 
 ## 📝 Project Description
 This project investigates sentiment around Brexit.
-This project investigates sentiment around Brexit.
 
 ## 📊 Data
 
