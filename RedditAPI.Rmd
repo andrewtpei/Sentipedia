@@ -23,7 +23,7 @@ summary(filtered)
 How are people describing Brexit over time? 
 ```{r}
 ##Wordclouds Graveyard
-text <- filtered %>% tibble() %>% unnest_tokens(word,comment) %>% left_join(parts_of_speech) %>% replace(pos, is.na(pos), 0) %>% filter(pos %in% c("Adjective","Verb")) %>% anti_join(stop_words, by = "word") %>% anti_join(dfcustomstop_words, by = "word") %>% left_join(sentiments, by = "word") %>%
+text <- filtered %>% tibble() %>% unnest_tokens(word,comment) %>% left_join(parts_of_speech) %>% filter(!is.na(pos)) %>% filter(pos %in% c("Adjective","Verb")) %>% anti_join(stop_words, by = "word") %>% anti_join(dfcustomstop_words, by = "word") %>% left_join(sentiments, by = "word") %>%
   filter(!is.na(value) & value != 0) %>% arrange(timestamp) %>% count(word, sort = T) %>% rename(freq = n)
 ```
 
