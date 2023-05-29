@@ -1,32 +1,29 @@
 ```{r}
 #Packages: 
-library(httr);library(jsonlite);library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(ggraph)
+library(jsonlite);library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(ggthemes); library(syuzhet); library(widyr)
 ```
 
+OBTAINING AND FILTERING DATA: 
 ```{r}
-#https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf 
-#RedditExtractoR
-```
-
-```{r}
-##Write.csv
-write.csv(filtered, "reddit.csv")
-threads_contents <- get_thread_content(top_Brexit_urls$url)
-```
-
-```{r}
-library(RedditExtractoR)
+##DO NOT RUN UNLESS WANT TO WAIT FOR AN HOUR
 #Returns a dataframe with the threads and basic info (e.g comments, date of post, content of post, and crucially the comment url)
-top_Brexit_urls <- find_thread_urls(subreddit = "unitedkingdom", keywords = "Brexit", sort_by = "top", period = "all"); dim(top_Brexit_urls); dim(df); summary(top_Brexit_urls); head(top_Brexit_urls)
+top_Brexit_urls <- find_thread_urls(subreddit = "unitedkingdom", keywords = "Brexit", sort_by = "top", period = "all");
+top_Brexit_urls$date_utc <- as.Date(top_Brexit_urls$date_utc)
+Atop_Brexit_urls <- arrange(top_Brexit_urls, date_utc)
+dim(Atop_Brexit_urls); summary(Atop_Brexit_urls); head(Atop_Brexit_urls)
 #Returns the comments within the threads 
-df <- threads_contents[["comments"]] %>% select(-c("author", "upvotes", "downvotes")) %>% filter(!str_detect(comment, regex("deleted", ignore_case = TRUE))); dim(df); summary(df); head(df)
-```
+threads_contents <- get_thread_content(Atop_Brexit_urls$url)
+df <- threads_contents[["comments"]] %>% select(-c("author", "upvotes", "downvotes")) %>% filter(!str_detect(comment, regex("deleted", ignore_case = TRUE)))
+dim(df); summary(df); head(df)
 
-```{r}
-##Wordclouds Graveyard
 filtered <- df %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE)));dim(filtered); summary(filtered)
 summary(filtered)
-text <- filtered %>% tibble() %>% unnest_tokens(word,comment) %>% left_join(parts_of_speech) %>% replace(pos, is.na(pos), 0) %>% filter(pos %in% c("Adjective","Verb")) %>% anti_join(stop_words, by = "word") %>% anti_join(dfcustomstop_words, by = "word") %>% left_join(sentiments, by = "word") %>%
+```
+
+How are people describing Brexit over time? 
+```{r}
+##Wordclouds Graveyard
+text <- filtered %>% tibble() %>% unnest_tokens(word,comment) %>% left_join(parts_of_speech) %>% filter(!is.na(pos)) %>% filter(pos %in% c("Adjective","Verb")) %>% anti_join(stop_words, by = "word") %>% anti_join(dfcustomstop_words, by = "word") %>% left_join(sentiments, by = "word") %>%
   filter(!is.na(value) & value != 0) %>% arrange(timestamp) %>% count(word, sort = T) %>% rename(freq = n)
 ```
 
@@ -56,7 +53,6 @@ toptopic2 <- texttopic %>% count(word, sort = T) %>% dplyr::rename(freq = n)
 toptopic3 <- texttopic %>% count(word, sort = T) %>% dplyr::rename(freq = n)
 toptopic4 <- texttopic %>% count(word, sort = T) %>% dplyr::rename(freq = n)
 ```
-
 
 ```{r}
 ##Word Clouds Emotions
@@ -96,7 +92,7 @@ df_bigrams <- df %>%
   unnest_tokens(bigram, comment, token = "ngrams", n = 2) %>%
   filter(!is.na(bigram))
 bigrams_separated <- df_bigrams %>% separate(bigram, c("word1", "word2"), sep = " ")
-custom_stopwords <- c("http", "amp", "https")
+custom_stopwords <- c("http", "amp", "https", "gt", "xit", "news")
 ```
 
 ```{r}
@@ -140,39 +136,18 @@ bigrams_united_all <- bigrams_filtered_all %>%
 ```
 
 ```{r}
-#INcluding all
-bigram_graph_all <- bigrams_united_all %>% count(bigram, sort = T) %>% filter(n > 100) %>% graph_from_data_frame()
+#Including all
+bigram_graph_all <- bigrams_united_all %>% count(bigram, sort = T) %>% filter(n > 150) %>% graph_from_data_frame()
 
 set.seed(123)
 bidiagram_all<- ggraph(bigram_graph_all, layout = "fr") +
         geom_edge_link() +
-        geom_node_point(color = "lightblue", size = 1) +
+        geom_node_point(color = "lightblue", linewidth = 1) +
         geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
         theme_void()
 bidiagram_all
 ```
 
-
-
-```{r}
-#Including all pairwise 
-df_pairwise <- df %>% tibble() %>% mutate(document = 1:nrow(df)) %>% unnest_tokens(word,comment) %>% filter(!word %in% stop_words$word)
-
-set.seed(123)
-
-df_pairwise %>%
-  group_by(word) %>%
-  filter(n() >= 20) %>%
-  pairwise_cor(word, document) %>%
-  filter(!is.na(correlation),
-         correlation > 0.5) %>%
-  graph_from_data_frame() %>%
-  ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = correlation), show.legend = FALSE) +
-  geom_node_point(color = "lightblue", size = 1) +
-  geom_node_text(aes(label = name), repel = TRUE) +
-  theme_void()
-```
 
 ```{r}
 #Sentiment over time 
@@ -199,8 +174,6 @@ timesentplot + theme_minimal() +
         plot.caption = element_text(size = 10, hjust = 0)) + theme(axis.text.x = element_blank())
 ```
 
-
-
 ```{r}
 ##########################################################################
 ##########################################################################
@@ -225,7 +198,7 @@ brexit2 <- word_pairs %>% filter(item1 == "brexit") %>% graph_from_data_frame()
 
 set.seed(123)
 a <- grid::arrow(type = "closed", length = unit(.05, "inches"))
-<- ggraph(government, layout = "fr") +
+b<- ggraph(government, layout = "fr") +
         geom_edge_link() +
         geom_node_point(color = "lightblue", size = 1) +
         geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
@@ -233,9 +206,9 @@ a <- grid::arrow(type = "closed", length = unit(.05, "inches"))
 
 ```
 
-brexit <- word_pairs %>% filter(item1 == "brexit" | item1 == "referendum" | item1 == "government" | item1 == "labour" | item1 == "tory" | item1 == "economy" | item1 == "politicians" | item1 == "ireland" | item1 == "scotland" | item1 == "hard") %>% filter(n > 150) %>% graph_from_data_frame()
+brexit \<- word_pairs %\>% filter(item1 == "brexit" \| item1 == "referendum" \| item1 == "government" \| item1 == "labour" \| item1 == "tory" \| item1 == "economy" \| item1 == "politicians" \| item1 == "ireland" \| item1 == "scotland" \| item1 == "hard") %\>% filter(n \> 150) %\>% graph_from_data_frame()
 
-filter(value != 0 | word == "brexit" | word == "government" | word == "labour" | word == "tory" | word == "economy" | word == "politicians" | word == "ireland" | word == "scotland" | word == "hard") %>% anti_join(stop_words, by = "word") 
+filter(value != 0 \| word == "brexit" \| word == "government" \| word == "labour" \| word == "tory" \| word == "economy" \| word == "politicians" \| word == "ireland" \| word == "scotland" \| word == "hard") %\>% anti_join(stop_words, by = "word")
 
 ```{r}
 ##Word Count Diagram with Brexit and Brexit-related topics
@@ -254,6 +227,16 @@ brexittopicgraph<- ggraph(brexit, layout = "fr") +
 brexittopicgraph
 ```
 
+TIME GRAPH OF EMOTIONS
+```{r}
+#Naive Emotional Classification
+filteredtest <- filtered %>% arrange(timestamp) %>% sentimentr::get_sentences()
+filteredemotion <- filtered %>% arrange(timestamp) %>% sentimentr::get_sentences() %>% sentimentr::emotion_by() 
+filteredemotion <- filtered %>% arrange(timestamp) %>% sentimentr::get_sentences() %>% get_nrc_sentiment() %>%
+
+```
+
+'
 ```{r}
 #Naive Emotional Classification
 library(sentimentr)
@@ -311,39 +294,6 @@ ggplot(emotionfilter4, aes(x = emotion_type, y = emotion_count)) +
 ```
 
 ```{r}
-secret <- "JaF5CKCdIVVZFdN3Hji3pkOoFzLu5g"
-id <- "j1WSOggJi4G_fmBweacstg"
-uri <- "http://localhost:8080"
-#Getting access token that expires in 1 hour 
-response <- httr::POST("https://www.reddit.com/api/v1/access_token",
-                 authenticate(id,secret),
-                 user_agent("DS101"), 
-                 body = list(grant_type="password", 
-                             username="Due_Calendar4413", 
-                             password="1,2Icelandlol")
-                 )
-
-access_token_json <- rawToChar(response$content)
-access_token_content <- fromJSON(access_token_json)
-access_token <- access_token_content$access_token
-access_token
-
-
-url <- "https://oauth.reddit.com/r/news/comments/hot" # try api/v1/me
-
-authorization_bearer <- paste("Bearer ", access_token, sep="")
-result <- httr::GET(url, 
-              user_agent("DS101"), 
-              add_headers(Authorization = authorization_bearer))
-result_json <- rawToChar(result$content)
-result_content <- fromJSON(result_json)
-b<- as.data.frame(result_content)
-
-#get a result for a given search query
-
-```
-
-```{r}
 #Graveyard
 df_renamed <- customstop_words %>% rename(word = `c("brexit", "uk", "eu", "gt", "https", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "100", "52", "12", "i.e", "70")`) 
 anti_join(df_renamed, by = "word", copy = TRUE)
@@ -370,7 +320,22 @@ try <- sapply(list(top_Brexit_urls$title,top_Brexit_urls$comments), puttitle)
 A <- list(top_Brexit_urls$title)
 B <- list(top_Brexit_urls$comments)
 result <- as.data.frame(unlist(mapply(rep, A, B)))
+
+#Including all pairwise 
+df_pairwise <- df %>% tibble() %>% mutate(document = 1:nrow(df)) %>% unnest_tokens(word,comment) %>% filter(!word %in% stop_words$word)
+
+set.seed(123)
+
+df_pairwise %>%
+  group_by(word) %>%
+  filter(n() >= 20) %>%
+  pairwise_cor(word, document) %>%
+  filter(!is.na(correlation),
+         correlation > 0.5) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = correlation), show.legend = FALSE) +
+  geom_node_point(color = "lightblue", size = 1) +
+  geom_node_text(aes(label = name), repel = TRUE) +
+  theme_void()
 ```
-
-
-
