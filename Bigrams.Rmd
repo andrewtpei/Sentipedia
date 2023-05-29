@@ -1,0 +1,109 @@
+# **Bigram Network Diagrams**
+```{r}
+library(httr);library(jsonlite);library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(ggraph); library(syuzhet); library(igraph); library(remotes); library(patchwork)
+```
+
+
+```{r}
+df_bigrams <- df %>%
+  unnest_tokens(bigram, comment, token = "ngrams", n = 2) %>%
+  filter(!is.na(bigram))
+bigrams_separated <- df_bigrams %>% separate(bigram, c("word1", "word2"), sep = " ")
+```
+
+```{r}
+#Just emotion
+custom_stopwords <- c("http", "amp", "https", "gt", "xit", "news", "wiki", "makes", "mail")
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word) %>% 
+  filter(word1 %in% sentiments$word) %>% 
+  filter(word2 %in% sentiments$word) %>% 
+  filter(!word1 %in% custom_stopwords) %>% 
+  filter(!word2 %in% custom_stopwords) 
+
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+
+#Split bigrams by time period
+n <- nrow(bigrams_united)
+bigrams_separated1 <- bigrams_united[1:round(n/4), ]
+bigrams_separated2 <- bigrams_united[(round(n/4) + 1):round(n/2), ]
+bigrams_separated3 <- bigrams_united[(round(n/2) + 1):round(3*n/4), ]
+bigrams_separated4 <- bigrams_united[(round(3*n/4) + 1):n, ]
+```
+
+```{r}
+#Emotional bigram wordcloud over time: 
+bicloud1 <- bigrams_separated1 %>% count(bigram, sort = T) %>% filter(n > 5); bicloud2<- bigrams_separated2 %>% count(bigram, sort = T) %>% filter(n > 5); bicloud3 <- bigrams_separated3 %>% count(bigram, sort = T) %>% filter(n > 5); bicloud4 <- bigrams_separated4 %>% count(bigram, sort = T) %>% filter(n > 5) #Converting the 4 split bigrams into a wordcloudable format. 
+
+
+set.seed(123)
+cloud1<- wordcloud2(bicloud1, shape = "circle", fontFamily = "mono"); cloud2<- wordcloud2(bicloud2, shape = "circle", fontFamily = "mono"); cloud3<- wordcloud2(bicloud3, shape = "circle", fontFamily = "mono"); cloud4 <- wordcloud2(bicloud4, shape = "circle", fontFamily = "mono") #Convert into 4 word clouds over time. 
+
+
+```
+
+```{r}
+#Including all
+bigrams_filtered_all <- bigrams_separated %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word) %>% 
+  filter(!word1 %in% custom_stopwords) %>% 
+  filter(!word2 %in% custom_stopwords) 
+
+bigrams_united_all <- bigrams_filtered_all %>%
+  unite(bigram, word1, word2, sep = " ")
+```
+
+```{r}
+bigram_graph_all <- bigrams_united_all %>% count(bigram, sort = T) %>% filter(n > 100)
+wordcloud2(bigram_graph_all, shape = "circle")
+```
+
+scale_edge_width(range = c(100, 1000))
+
+```{r}
+#Including all
+bigram_graph_all <- bigrams_united_all %>% count(bigram, sort = T) %>% filter(n > 100)
+wordcloud2(bigram_graph_all, shape = "circle")
+  
+  graph_from_data_frame()
+
+set.seed(123)
+bidiagram_all<- ggraph(bigram_graph_all, layout = "fr") +
+        geom_edge_link() +
+        geom_node_point(color = "lightblue", size = 5, shape = 5, fill = "white") +
+        geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+        theme_void()
+
+bidiagram_all
+
+text <- df %>% tibble() %>% unnest_tokens(word,comment) %>% left_join(sentiments, by = "word") %>% filter(!is.na(value) & value != 0) %>% anti_join(stop_words, by = "word") %>% anti_join(dfcustomstop_words, by = "word") %>% arrange(timestamp)
+
+n <- nrow(text)
+text1 <- text[1:round(n/4), ]
+text2 <- text[(round(n/4) + 1):round(n/2), ]
+text3 <- text[(round(n/2) + 1):round(3*n/4), ]
+text4 <- text[(round(3*n/4) + 1):n, ]
+
+cloud1 <- text1 %>% count(word, sort = T) %>% rename(freq = n);cloud2 <- text2 %>% count(word, sort = T) %>% rename(freq = n);cloud3 <- text3 %>% count(word, sort = T) %>% rename(freq = n);cloud4 <- text4 %>% count(word, sort = T) %>% rename(freq = n)
+wordcloud2(cloud1, shape = "circle");wordcloud2(cloud2, shape = "circle"); wordcloud2(cloud3, shape = "circle"); wordcloud2(cloud4, shape = "circle")
+
+```
+
+```{r}
+#Including all
+bigram_graph_all <- bigrams_united_all %>% count(bigram, sort = T) %>% filter(n > 100)
+
+  
+  raph_from_data_frame()
+
+set.seed(123)
+bidiagram_all<- ggraph(bigram_graph_all, layout = "fr") +
+        geom_edge_link() +
+        geom_node_point(color = "lightblue", size = 5, shape = 21, fill = "white") +
+        geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+        theme_void()
+bidiagram_all
+```
