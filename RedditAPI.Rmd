@@ -13,11 +13,16 @@ Atop_Brexit_urls <- arrange(top_Brexit_urls, date_utc)
 dim(Atop_Brexit_urls); summary(Atop_Brexit_urls); head(Atop_Brexit_urls)
 #Returns the comments within the threads 
 threads_contents <- get_thread_content(Atop_Brexit_urls$url)
-df <- threads_contents[["comments"]] %>% select(-c("author", "upvotes", "downvotes")) %>% filter(!str_detect(comment, regex("deleted", ignore_case = TRUE)))
-dim(df); summary(df); head(df)
+df_Brexit <- threads_contents[["comments"]] %>% select(-c("author", "upvotes", "downvotes")) %>% filter(!str_detect(comment, regex("deleted", ignore_case = TRUE)))
 
-filtered <- df %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE)));dim(filtered); summary(filtered)
+```
+
+```{r}
+#Cleaning: 
+dim(df_Brexit); summary(df_Brexit); head(df_Brexit)
+filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE)));dim(filtered); summary(filtered)
 summary(filtered)
+
 ```
 
 How are people describing Brexit over time? 

@@ -1,6 +1,6 @@
 # **Bigram Network Diagrams**
 ```{r}
-library(httr);library(jsonlite);library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(ggraph); library(syuzhet); library(igraph); library(remotes); library(patchwork)
+library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(syuzhet); library(gridExtra); library(gridGraphics); library(ggplotify); library(plotly)
 ```
 
 
@@ -15,7 +15,7 @@ bigrams_separated <- df_bigrams %>% separate(bigram, c("word1", "word2"), sep = 
 #Just emotion
 custom_stopwords <- c("http", "amp", "https", "gt", "xit", "news", "wiki", "makes", "mail")
 bigrams_filtered <- bigrams_separated %>%
-  filter(!word1 %in% stop_words$word) %>%
+  filter(!word1 %in% stop_words$word) %>% #uses a stopword dataframe from the tidytext package
   filter(!word2 %in% stop_words$word) %>% 
   filter(word1 %in% sentiments$word) %>% 
   filter(word2 %in% sentiments$word) %>% 
@@ -41,6 +41,10 @@ bicloud1 <- bigrams_separated1 %>% count(bigram, sort = T) %>% filter(n > 5); bi
 set.seed(123)
 cloud1<- wordcloud2(bicloud1, shape = "circle", fontFamily = "mono"); cloud2<- wordcloud2(bicloud2, shape = "circle", fontFamily = "mono"); cloud3<- wordcloud2(bicloud3, shape = "circle", fontFamily = "mono"); cloud4 <- wordcloud2(bicloud4, shape = "circle", fontFamily = "mono") #Convert into 4 word clouds over time. 
 
+cloud1_grob <- as.grob(cloud1)
+
+combined_plot <- grid.arrange(cloud1, cloud2, cloud3, cloud4,
+                              ncol = 2, top = "Combined Plots")
 
 ```
 
