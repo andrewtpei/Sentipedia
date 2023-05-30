@@ -134,4 +134,5 @@ similarity2 <- ggplotly(similarity1, tooltip = c("text")) %>%
 
 # Display the plot
 similarity2
+saveWidget(similarity2, "similarity2.html")
 ```
