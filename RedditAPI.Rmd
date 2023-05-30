@@ -61,7 +61,7 @@ toptopic4 <- texttopic %>% count(word, sort = T) %>% dplyr::rename(freq = n)
 
 ```{r}
 ##Word Clouds Emotions
-word <- c("British", "pro", "left", "right", "anti", "leave","hard", "yeah"); dfcustomstop_words <- as.data.frame(word)
+word <- c("British", "pro", "left", "right", "anti", "leave","hard", "yeah", "Brexit"); dfcustomstop_words <- as.data.frame(word)
 sentiments <- get_sentiments("afinn")
 
 text <- df %>% tibble() %>% unnest_tokens(word,comment) %>% left_join(sentiments, by = "word") %>% filter(!is.na(value) & value != 0) %>% anti_join(stop_words, by = "word") %>% anti_join(dfcustomstop_words, by = "word") %>% arrange(timestamp)
@@ -344,3 +344,33 @@ df_pairwise %>%
   geom_node_text(aes(label = name), repel = TRUE) +
   theme_void()
 ```
+
+```{r}
+# Load required packages
+library(tm)
+library(stringr)
+
+# Create TDMs
+corpus1 <- Corpus(VectorSource(disgust1))
+corpus2 <- Corpus(VectorSource(gen1))
+tdm1 <- DocumentTermMatrix(disgust1)
+tdm2 <- DocumentTermMatrix(gen1)
+
+# Convert TDMs to matrices
+mat1 <- as.matrix(tdm1)
+mat2 <- as.matrix(tdm2)
+
+# Calculate word frequencies
+freq1 <- colSums(mat1)
+freq2 <- colSums(mat2)
+
+# Compare word frequencies
+diff_freq <- freq2 - freq1
+ratio_freq <- freq2 / freq1
+
+# Sort by absolute differences or ratios
+sorted_diff_freq <- sort(abs(diff_freq), decreasing = TRUE)
+sorted_ratio_freq <- sort(ratio_freq, decreasing = TRUE)
+
+```
+
