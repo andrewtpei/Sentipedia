@@ -1,5 +1,6 @@
 ---
-layout: home
+
+layout: base
 ---
 # Sentipedia: Analyzing Emotions and Sentiment Around Brexit 
 Hello this is a test
