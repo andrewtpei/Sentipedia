@@ -291,11 +291,11 @@ Further research could explore alternative methods to address the challenges ass
 
 # 6. Footnotes
 
-https://aclanthology.org/D13-1066.pdf 
-https://www.theguardian.com/politics/ng-interactive/2023/jan/30/changing-attitudes-to-brexit-three-years-on)
-https://fivethirtyeight.com/features/nonresponse-bias-ipsos-poll-findings/
-https://thrivemyway.com/reddit-statistics/#:~:text=The%20average%20age%20of%20Reddit,of%20getting%20their%20college%20degrees
-https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
+* https://aclanthology.org/D13-1066.pdf 
+* https://www.theguardian.com/politics/ng-interactive/2023/jan/30/changing-attitudes-to-brexit-three-years-on)
+* https://fivethirtyeight.com/features/nonresponse-bias-ipsos-poll-findings/
+* https://thrivemyway.com/reddit-statistics/#:~:text=The%20average%20age%20of%20Reddit,of%20getting%20their%20college%20degrees
+* https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
 
 <br>
 
