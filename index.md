@@ -110,4 +110,7 @@ Furthermore, sentiment analysis like this could have wider implications as they 
 # 6. Footnotes: 
 
 https://aclanthology.org/D13-1066.pdf 
+
+# 7. Additions if less time constrained by team issues: 
+1. Had ggplotly diagrams that were interactive but did not have time to add them
  
