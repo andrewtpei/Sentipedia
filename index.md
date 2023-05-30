@@ -6,6 +6,7 @@ title: Sentipedia - Analyzing Emotions and Sentiment Around Brexit 🇬🇧
 Group members: Vaibhav Vinod, Andrew Pei, Vincent Wei, ChakHa Yeung
 
 <br>
+
 # 1. Introduction 
 
 ## 1.1 What is Brexit 
