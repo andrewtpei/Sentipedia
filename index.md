@@ -81,9 +81,7 @@ An example of skipped article
 
 ![figure](Figures/get_link.png)
 
-Also, some newspaper sources do not allow free access. So, we skipped approximately 10 articles using the try except method demonstrated below.
-
-![figure](Figures/skip_article.png)
+Also, some newspaper sources do not allow free access. So, we skipped approximately 10 articles using the try except method.
 
 An example of skipped article
 ![figure](Figures/error_example.png)
