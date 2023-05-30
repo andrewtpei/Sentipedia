@@ -108,16 +108,13 @@ One limitation might be summarisation using the T5 model may have resulted in th
 
 ![figure](Figures/after.png)
 
-## 2.1 EDA of Reddit Post/Threads Dataframe 
-Out of the 229 posts, we discovered around 150 of them contain news articles. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth
-
-## 2.2 EDA of Reddit Comments Dataframe (df_filtered) which contains "Brexit" 
+## 2.1 EDA of Reddit Comments Dataframe (df_filtered) which contains "Brexit" 
 Df_filtered has 11765 rows and 7 columns, with dates of comments ranging between 2016-06-24 to 2023-05-14 and an average "score" ( comment upvotes - downvotes) of roughly 22. We can find the default data types using the str command in R, which shows that only the url and comment columns are characters while the remaining 4 columns are numeric. To get a rough understanding of distributions for our relevant numeric variables, we plotted histograms of the date and score variable. It suggests there is a significant positive skew for the score variable, and and that a majority of the comments occurred in 2018-2019 and 2022-2023. However, we decided not to remove score outliers because engagement in social media platforms tends to be dominated by a small number of posts, so it is not unexpected that the distribution is non-normal. In addition, the score variable is not used as a predictor for emotional classification or sentiment analysis, so most of the results should not be affected. 
 
 ![figure](Figures/Reddit_Comm_Dist.png)
 
-## 2.3 EDA of News Articles
-We collected 145 news articles from the reddit links
+## 2.2 EDA of News Articles
+We collected 145 news articles from the reddit links. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth. For this section, we instead decided to play with some frequency diagrams and wordclouds to get an initial perspective on this textual dataset. 
 
 ## Word Cloud for Text 
 
@@ -147,6 +144,7 @@ _“I'm wondering if their support was decided upon because they felt there was 
 
 ## 3.2 Emotional Word Clouds and Classification Implementation: 
 We first preprocessed comments by tokenising into word pairs (bigrams) that are separated into two columns, before removing stop words using a dataframe (stop_words) from the tidytext package and ‘non-emotional words’ based on whether it appears in a sentiment dictionary (sentiment).
+
 ```r
 df_bigrams <- df_filtered %>%
   unnest_tokens(bigram, comment, token = "ngrams", n = 2) %>% #tokenised into bigrams 
@@ -266,7 +264,6 @@ By examining the nouns associated with positive comments and news articles conce
 ![figure](Figures/sentiment_news_positive.png)
 
 However, it is important to recognize the limitations inherent in analyzing common nouns associated with Brexit. When considering nouns associated with both positive and negative aspects of Brexit, we observe a striking similarity, providing limited direct insight into the distinctions between these two aspects. This lack of differentiation may arise due to the sheer quantity of data analyzed, as key aspects of Brexit could potentially be overshadowed by the prevalence of high-frequency words.
-
 
 # 5.Conclusion 
 
