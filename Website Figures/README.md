@@ -1,1 +1,2 @@
-# Figures directory (figures used in our website)
+# Figures Directory 
+![figure](Website Figures/sentiment_brexit_negative.png)
