@@ -34,11 +34,7 @@ Out of the 229 posts, we discovered around 150 of them contain news articles. Fo
 ### 2.2 EDA of Reddit Comments Dataframe (df_filtered) which contains "Brexit" 
 Df_filtered has 11765 rows and 7 columns, with dates of comments ranging between 2016-06-24 to 2023-05-14 and an average "score" ( comment upvotes - downvotes) of roughly 22. We can find the default data types using the str command in R, which shows that only the url and comment columns are characters while the remaining 4 columns are numeric. To get a rough understanding of distributions for our relevant numeric variables, we plotted histograms of the date and score variable. It suggests there is a significant positive skew for the score variable, and and that a majority of the comments occurred in 2018-2019 and 2022-2023. However, we decided not to remove score outliers because engagement in social media platforms tends to be dominated by a small number of posts, so it is not unexpected that the distribution is non-normal. In addition, the score variable is not used as a predictor for emotional classification or sentiment analysis, so most of the results should not be affected. 
 
-![image](https://github.com/andrewtpei/Sentipedia/assets/124374148/92037c4d-047b-46c3-95ed-9dd0d97b6013)
-
- 
-
-
+![figure](Figures/Reddit_Comm_Dist.png)
 
 # 3. Data Analysis 
 ### 3.1 Method Choice and Reasoning for Emotional Analysis
