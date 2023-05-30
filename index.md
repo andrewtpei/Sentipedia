@@ -1,6 +1,6 @@
 ---
 
-layout: base
+layout: home
 ---
 # Sentipedia: Analyzing Emotions and Sentiment Around Brexit 
 Group members: Vaibhav V, Andrew Pei, Vincent Wei, ChakHa Yeung
