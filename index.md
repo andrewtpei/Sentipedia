@@ -55,3 +55,7 @@ The strong correlation between disgust and high scores suggests it was a less â€
 ## 4.1 Emotional Classification
 
 # 5.Conclusion 
+# 6. Footnotes: 
+
+https://aclanthology.org/D13-1066.pdf 
+ 
