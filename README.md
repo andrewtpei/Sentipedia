@@ -1,37 +1,14 @@
-our website: https://billyblue1.github.io/sentipedia/
-# A Practical Workflow for Data Science Projects
+our website: [https://andrewtpei.github.io/sentipedia/]
+# Brexit Emotions and Sentiment Dashboard
 
-This project is intended as a template structure for data science projects. Its main intended use is for teams within organizations but we see no reason why you would not benefit from it even if you are coding solo, participating in a data hackathon or are in an academic group, doing exploratory, statistical analysis or algorithm modelling.
+This project explores the emotions and average sentiment of Brexit using R and Python. 
 
-This is a standalone **template project** that can be used as a starting point for any data science project. It is not a framework, a library, or a package. It is a template that you can use to start your own project. It is not intended to be a one-size-fits-all solution, but rather a starting point for you to build your own project structure.
+# 👥 **Project Contributors**
 
-_If you like this project, please consider giving it a ⭐️!_
-
-# 👥 **Team**
-
-- [Jon](http://github.com/jonjoncardoso) as the core developer
-
-**People who have contributed to this course in the past:**
-
-- [Karina Moura](https://github.com/kvmoura). _A stellar project manager!_
-- [Natalia Del Coco](https://github.com/NataliaDelCoco). _She is taking her van to the mountains for a while._
-- [Sara Luxmoore](https://github.com/SaraLuxmoore). _She can be seen doing cool research-related stuff in Italy these days._
-
-# Initial repository setup
-
-Follow the instructions below to make use of this template.
-
-1. Create a new repository on GitHub using this template. You can do this by clicking on the green "Use this template" button on the top right of this page. 
-
-    ![Illustration of how to use this template](https://user-images.githubusercontent.com/896254/224554953-9819f73a-fdd1-4045-a183-dfa7d3601121.png)
-
-2. Give your project a name and description. You can also choose to make the repository **private** if you wish. 
-    - Leave "Include all branches" unchecked.
-
-3. GitHub will copy the files from this repository into your new repository and it will trigger an **Actions** workflow. This workflow will customize labels (to include emojis!) as well as Issues and Pull Request templates for your project.
-    - If you are not familiar with GitHub Actions, you can read more about it [here](https://docs.github.com/en/actions).
-
-4. Clone your new repository to your computer and start working on it!
+- [Andrew Pei](https://github.com/andrewtpei). _Our python coder for comment sentiment._
+- [Vaibhav Vinod](. _Our writer._
+- [Vincent Wei](https://github.com/Imafont59). _Our R coder for comment emotional classification._
+- [William Yeung](https://github.com/billyblue1). _Our python coder for newspaper articles._
 
 # First steps
 
@@ -50,11 +27,6 @@ Click on the links below to learn how to best use this template, and how to cont
 <details><summary>✋ How to contribute</summary>
 
 ## ✋ How to contribute
-
-If you want to propose changes to the template, follow the steps below:
-
-1. Set up your environment by following the instructions in the [Dev Setup](#dev-setup) section.
-2. Create a new branch from `develop` and give it a meaningful name. Best practices involve using the following format: `<your-username>/<issue-number>-<short-description>`. For example, if you are working on issue #3, you could name your branch `jonjoncardoso/3-update-github-action`. Remember the [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) workflow!
 3. Make your changes and commit them to your branch. Remember to commit often and to write meaningful commit messages. If you are working on a specific issue, you can use the following format: `<gitmoji> #<issue-number> <commit-message>`. For example, if you are working on issue #3, you could write `📝 #3 Update GitHub Action`. 
     - To add emojis on Windows, just type `Win + .` and then select the emoji you want. On Mac, it's the world symbol `⌘ + Ctrl + Space`.
     - You can find a list of gitmojis [here](https://gitmoji.dev/). If you are not sure what to write, you can use `📝` for documentation, `🐛` for bug fixes, `🌟` for new features, and `♻️` for refactoring. You can also use `🔧` for general changes. If you are not sure, just ask! 
