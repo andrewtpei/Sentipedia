@@ -26,8 +26,6 @@ The package also simplifies the data collection process, with just a single comm
 
 # 2.Initial Data Collection 
 
-### 2
-
 ### 2.1 EDA of Reddit Post/Threads Dataframe 
 Out of the 229 posts, we discovered around 150 of them contain news articles. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth
 
