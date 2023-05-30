@@ -3,10 +3,6 @@ library(RedditExtractoR);library(tidyverse);library(tidytext); library(wordcloud
 ```
 
 ```{r}
-reddit_Brexit <- read_csv("~/Downloads/sentipedia/Coding implementation/nltk/reddit_Brexit.csv")
-```
-
-```{r}
 df_bigrams <- df_filtered %>%
   unnest_tokens(bigram, comment, token = "ngrams", n = 2) %>%
   filter(!is.na(bigram))
@@ -41,5 +37,8 @@ bicloud1 <- bigrams_separated1 %>% count(bigram, sort = T) %>% top_n(n = 50, wt 
 #Convert into 4 word clouds covering different time periods
 cloud1<- wordcloud2(bicloud1, shape = "circle", fontFamily = "mono"); cloud2<- wordcloud2(bicloud2, shape = "circle", fontFamily = "mono"); cloud3<- wordcloud2(bicloud3, shape = "circle", fontFamily = "mono"); cloud4 <- wordcloud2(bicloud4, shape = "circle", fontFamily = "mono") 
 
-cloud1;cloud2;cloud3;cloud4
+cloud1; #2016-2018
+cloud2; #2018-2020
+cloud3; #2020-2021
+cloud4  #2021-2023
 ```

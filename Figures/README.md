@@ -1,0 +1,11 @@
+# Figures Directory 
+![figure](text_complexity.png)
+![figure](sentiment_full_overtime.png)
+![figure](sentiment_brexit_overtime.png)
+![figure](sentiment_news_overtime.png)
+![figure](sentiment_full_negative.png)
+![figure](sentiment_brexit_negative.png)
+![figure](sentiment_news_negative.png)
+![figure](sentiment_full_positive.png)
+![figure](sentiment_brexit_positive.png)
+![figure](sentiment_news_positive.png)
