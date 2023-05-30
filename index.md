@@ -68,8 +68,6 @@ df_filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_c
 ```
 ![figure](Figures/df_Brexit.png)
 
-
-## News Article Data
 ## News Article Data
 In our next step, we chose to extract news links connected to the subreddit discussions due to the challenges associated with retrieving older news articles using traditional methods such as News APIs. Given that sentiment analysis on Brexit encompasses a wide temporal range, it becomes increasingly difficult to obtain historical news data through APIs alone.
 
