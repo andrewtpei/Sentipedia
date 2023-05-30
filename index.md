@@ -1,12 +1,13 @@
 ---
 layout: home
-title: Sentipedia: Analyzing Emotions and Sentiment Around Brexit 
+---
+---
+title: Sentipedia: Emotional and Sentiment Analysis on Brexit
 ---
 
 Group members: Vaibhav V, Andrew Pei, Vincent Wei, ChakHa Yeung
 
 # 1. Introduction 
-<br>
 
 ## 1.1 What is Brexit 
 Brexit, a contraction of "British exit," signifies the process by which the United Kingdom (UK) disengages from its membership in the European Union (EU). This consequential event was set into motion by a referendum held on June 23, 2016, and officially materialized on January 31, 2020. Since its inception in 2016, Brexit has become arguably the most divisive topic in UK politics, leading to the resignation of former Prime Minister David Cameron and profoundly shaping the policies of subsequent Prime Ministers.
