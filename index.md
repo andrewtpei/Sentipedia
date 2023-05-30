@@ -1,10 +1,9 @@
 ---
 layout: home
 ---
----
-title: Sentipedia: Emotional and Sentiment Analysis on Brexit
----
 
+
+# Sentipedia: Emotional and Sentimental Analysis On Brexit
 Group members: Vaibhav V, Andrew Pei, Vincent Wei, ChakHa Yeung
 
 # 1. Introduction 
