@@ -1,0 +1,18 @@
+```{r}
+#Reddit Comments: 
+dim(df_filtered); summary(df_filtered)
+df_filtered$date<- as.Date(df_filtered$date)
+hist(df_filtered$score, main = "Reddit Comment Score", xlab = "Score")
+hist(df_filtered$date, main = "Reddit Posts Frequencies over time", breaks = 20, xlab = "Date")
+
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
