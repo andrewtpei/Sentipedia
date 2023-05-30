@@ -44,12 +44,9 @@ Due to time constraints, an off-the-shelf dictionary-based emotional classificat
 
 _“I'm wondering if their support was decided upon because they felt there was no realistic prospect of Corbyn actually pushing for a second vote which would mean it was another way they could oppose Brexit - which they consider likely to be seriously harmful to Scotland - whilst knowing that if no second vote happened then there's no way any future government in Westminster could plausibly argue for referendum on any agreed Scottish independence deal and be taken seriously.” _
 
-### 3.2 Implementation: 
-#### 3.2.1 Emotional Word Clouds Implementation: 
-Uses the filtered dataframe (only comments mentioning Brexit). 
-Preprocess comments by tokenising into word pairs (bigrams) that are separated into two columns, before removing stop words using a dataframe (stop_words) from the tidytext package and ‘non-emotional words’ based on whether it appears in a sentiment dictionary (sentiment).
+### 3.2 Emotional Word Clouds and Classification Implementation: 
+We first preprocessed comments by tokenising into word pairs (bigrams) that are separated into two columns, before removing stop words using a dataframe (stop_words) from the tidytext package and ‘non-emotional words’ based on whether it appears in a sentiment dictionary (sentiment).
 
-#### 3.2.2 Emotional Classification Diagrams Implementation: 
 Preprocess comments by tokenising each comment into individual sentences, before running sentimentr’s off-the-shelf emotion() function to get the recorded number of emotional instances for each sentence in a relatively clean dataframe (emotion1). That dataframe is then filtered to remove instances where 0 emotions were recorded for a particular sentence, before additional tidyverse functions were used to wrangle the data frames into a desired format for visualisation. 
 
 # 4.Discussion of Results 
