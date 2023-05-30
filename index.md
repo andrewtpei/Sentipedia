@@ -101,11 +101,11 @@ This approach helped us condense the articles to their core messages and mitigat
 
 One limitation might be summarisation using the T5 model may have resulted in the loss of some contextual nuances. Nevertheless, it provided us with a significantly cleaned dataset, ready for further analysis.
 
-##Data frame before cleaning
+### Data frame before cleaning
 
 ![figure](Figures/before.png)
 
-##Data frame after cleaning
+### Data frame after cleaning
 
 ![figure](Figures/after.png)
 
@@ -117,22 +117,22 @@ Df_filtered has 11765 rows and 7 columns, with dates of comments ranging between
 ## 2.2 EDA of News Articles
 We collected 145 news articles from the reddit links. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth. For this section, we instead decided to play with some frequency diagrams and wordclouds to get an initial perspective on this textual dataset. 
 
-## Word Cloud for Text 
+### Word Cloud for Text 
 
 ![figure](Figures/wc_text.png)
 
-## Word Cloud for Summaries 
+### Word Cloud for Summaries 
 
 ![figure](Figures/wc_summaries.png)
 
 The word clouds generated from news texts and news summaries provide consistent insights into the sentiment and key themes surrounding Brexit. In both word clouds, the term "leave" stands out prominently, highlighting the enduring impact of the decision to exit the European Union. The presence of the word "party" in both word clouds suggests the involvement of political parties and their role in shaping the Brexit narrative. Additionally, the word "crisis" in the word cloud for news summaries reflects the persistent challenges and uncertainties associated with Brexit. However, amidst the turmoil, the word "good" emerges, potentially signifying positive aspects or perceived advantages of the situation. Together, these words capture the complexity and multifaceted nature of sentiment and opinions surrounding Brexit, highlighting the ongoing debates and diverse perspectives on this ongoing issue.
 
-## Frequency Table for Text vs Frequency Table for Summaries
+### Frequency Table for Text vs Frequency Table for Summaries
 
 ![figure](Figures/frequency.png)
 
 The consistency between the two frequency tables further reinforces the prevalent sentiment surrounding Brexit. The fact that the terms "no" and "leave" have the highest frequencies in both tables indicates a common theme of scepticism and a desire for separation from the EU among the news articles that were scraped as a data source. The frequent appearance of "no" suggests resistance or opposition to specific aspects of Brexit, such as proposed policies or negotiation outcomes. This indicates that there are concerns or objections regarding certain elements of the Brexit process. Additionally, the high frequency of "leave" highlights the continued focus on the decision made by the United Kingdom to exit the European Union. It underscores the ongoing discussions and implications associated with this monumental choice. Overall, these consistent results highlight the prevalent sentiments of scepticism, resistance, and attention to the decision to leave the EU in the news articles analysed
-![image](https://github.com/andrewtpei/Sentipedia/assets/114443347/abab25cf-2f8c-47d1-9142-642ad7ab1d44)
+!
 
 
 # 3. Data Analysis 
