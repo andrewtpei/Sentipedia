@@ -47,6 +47,8 @@ The final output of our analysis takes the form of visualizations, including lin
      
 # 2.Initial Data Collection 
 
+## Reddit Comments Data
+
 Our first data source was the post threads of the united kingdom subreddit. For the extraction of data, we used the Reddit Extractor in RStudio, a wrapper for Reddit's API. This enabled us to directly interact with the Reddit API and bypass some data access limitations, allowing us to easily pull relevant data such as user post title, post url, and upvote to downvote ratios (score). However, there still remains a limit on the number of total posts that can be pulled with if you specify by “top” (229). We ultimately decided against using other parameters, such as “relevant”, because even though it gets more posts (over 900) the overall number of comments is fewer because it pulls lower-engagement posts. It also increases the likelihood of the post not being a news article, which undermines our desired analysis of interacting redditors and news articles. We employed parameters such as time range and subreddit to fine-tune the query for posts. As mentioned in the project flow section, we ultimately choose the unitedkingdom subreddit as it targets a young, but on paper not overly left-wing, online audience. The figure below shows the head of the initial extracted dataframe (Atopbrexiturl) and the code used to obtain the data.  
 
 ```r
@@ -67,6 +69,7 @@ df_filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_c
 ![figure](Figures/df_Brexit.png)
 
 
+## News Article Data
 ## News Article Data
 In our next step, we chose to extract news links connected to the subreddit discussions due to the challenges associated with retrieving older news articles using traditional methods such as News APIs. Given that sentiment analysis on Brexit encompasses a wide temporal range, it becomes increasingly difficult to obtain historical news data through APIs alone.
 
@@ -131,6 +134,8 @@ The word clouds generated from news texts and news summaries provide consistent 
 ![figure](Figures/frequency.png)
 
 The consistency between the two frequency tables further reinforces the prevalent sentiment surrounding Brexit. The fact that the terms "no" and "leave" have the highest frequencies in both tables indicates a common theme of scepticism and a desire for separation from the EU among the news articles that were scraped as a data source. The frequent appearance of "no" suggests resistance or opposition to specific aspects of Brexit, such as proposed policies or negotiation outcomes. This indicates that there are concerns or objections regarding certain elements of the Brexit process. Additionally, the high frequency of "leave" highlights the continued focus on the decision made by the United Kingdom to exit the European Union. It underscores the ongoing discussions and implications associated with this monumental choice. Overall, these consistent results highlight the prevalent sentiments of scepticism, resistance, and attention to the decision to leave the EU in the news articles analysed
+![image](https://github.com/andrewtpei/Sentipedia/assets/114443347/abab25cf-2f8c-47d1-9142-642ad7ab1d44)
+
 
 # 3. Data Analysis 
 ## 3.1 Method Choice and Reasoning for Emotional Analysis
