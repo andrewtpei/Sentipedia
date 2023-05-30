@@ -48,6 +48,7 @@ Following the extraction, both data frames undergo cleaning and wrangling using 
 The final output of our analysis takes the form of visualizations, including line charts, word clouds, and bar charts, among others. These visualizations provide a comprehensive representation of the findings derived from our data analysis process.
 
 <br>
+
 # 2.Initial Data Collection 
 
 ## Reddit Comments Data
@@ -136,6 +137,7 @@ The consistency between the two frequency tables further reinforces the prevalen
 
 
 <br>
+
 # 3. Data Analysis 
 ## 3.1 Method and Implementation of Emotional Analysis
 ### 3.1.1 Emotional Word Clouds / Emotional Classification Method Reasoning: 
@@ -230,6 +232,7 @@ def get_nouns(tokens):
 ```
 
 <br>
+
 # 4.Discussion of Results 
 ## 4.1 Emotional Classification Results Analysis
 Based on the sentiment classifier depicted in the aforementioned figure, the frequency of most emotions within comments remained relatively stable, with only minor year-on-year fluctuations of a few percentage points. The rankings of emotions also exhibited limited changes, with disgust being the least commonly expressed emotion and anticipation being the most commonly expressed emotion throughout the analyzed period.
@@ -272,6 +275,7 @@ By examining the nouns associated with positive comments and news articles conce
 However, it is important to recognize the limitations inherent in analyzing common nouns associated with Brexit. When considering nouns associated with both positive and negative aspects of Brexit, we observe a striking similarity, providing limited direct insight into the distinctions between these two aspects. This lack of differentiation may arise due to the sheer quantity of data analyzed, as key aspects of Brexit could potentially be overshadowed by the prevalence of high-frequency words.
 
 <br>
+
 # 5.Conclusion 
 
 In conclusion, our research employed various data analysis methods to investigate the sentiment expressed in Reddit comments regarding Brexit. Through emotional classification and sentiment analysis, we were able to address our initial question concerning the evolving opinions towards Brexit. The findings revealed an increasing prevalence of negative emotions over time, particularly fear, anger, and disgust. Furthermore, the sentiment expressed in Reddit comments demonstrated a shift towards the negative, deviating from traditional polling results. However, it is important to acknowledge that the true extent of negative sentiment may be underestimated due to challenges in accurately classifying sarcasm as a negative emotion and the generalized approach utilized for sentiment estimation.
@@ -284,6 +288,7 @@ It is important to note that our research had certain limitations. The challenge
 Further research could explore alternative methods to address the challenges associated with sarcasm detection and refine sentiment analysis techniques. Additionally, investigating the reasons behind the disparity between young people's sentiment and traditional polling results could provide valuable insights into the changing dynamics of public opinion. Overall, our research contributes to a better understanding of sentiment dynamics surrounding Brexit and highlights the complexities involved in capturing and interpreting public sentiment in the digital age.
 
 <br>
+
 # 6. Footnotes
 
 https://aclanthology.org/D13-1066.pdf 
@@ -293,6 +298,7 @@ https://thrivemyway.com/reddit-statistics/#:~:text=The%20average%20age%20of%20Re
 https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
 
 <br>
+
 # 7. Contributions Table
 ![figure](Figures/Contributions.png)
 
