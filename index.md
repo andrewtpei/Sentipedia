@@ -3,15 +3,20 @@
 layout: base
 ---
 # Sentipedia: Analyzing Emotions and Sentiment Around Brexit 
-Hello this is a test
+Group members: Vaibhav V, Andrew Pei, Vincent Wei, ChakHa Yeung
+![figures](Figures/text_complexity.png)
 
-# 1.Introduction 
+# 1. Introduction 
 
 ### 1.1 What is Brexit 
-
+Brexit, short for "British exit," refers to the withdrawal of the United Kingdom (UK) from the European Union (EU). The Brexit process began with a referendum held on June 23, 2016 and officially took effect on January 31, 2020.  
 
 ### 1.2 What is the motivation for our study
-
+Our motivations for choosing this topic revolved around some key questions?
+* How did sentiment around Brexit change after three years. Is it true that people disagree with Brexit more and more?
+* Are polls accurate at describing sentiment around Brexit given that they only reach a certain group of people?
+* Is there a difference between sentiment around Brexit in traditional news outlets vs. social media?
+* Do young people think differently about Brexit compared to the norm?
 
 ### 1.3 Research Design / Project Flow Diagram
 Our project flow is summarised in the diagram below. Because reddit’s official API has several limitations on the number of pull requests and retrievable data, an API wrapper from library redditExtractoR was used to bypass its restrictions. Even though RedditExtractoR can still only obtain a limited number of posts, it is superior to the default wrapper in being able to extract all the desired information and contents of the posts. On top of this, the wrapper can restrict the query to specific subreddits, ensuring comments exclusively originate from our target audience of young British redditors. We ultimately choose the unitedkingdom subreddit, as its users represent a wider political spectrum than alternative uk politics-related subreddits, likely contains the most data points on this topic from the desired target group, and most crucially its posts mainly consist of formal news articles. Over half of the post titles are news headlines with the text consisting of the corresponding news article, leaving us with a large sample to work with. This streamlines the data collection process by simultaneously extracting the news articles and the reactions to them, allowing us to ‘kill two birds with one stone’ and avoid a separate data collection process for news articles. However, even though this method has merit in its convenience, it introduces selection bias: articles that draw the most anger and outrage are more likely to be posted on reddit. Nevertheless, given the project scope and the difficulties of matching separate news articles to reddit reactions, it probably remains the most concrete way of gaining an insight into the interaction between redditors and news articles describing Brexit-related events. 
