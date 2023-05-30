@@ -1,26 +1,25 @@
----
-title: "📚 Project Title"
-date: 20 March 2023
-date-meta: 20 March 2023
----
+# Sentipedia: Analyzing Sentiment of Brexit Within Reddit and News 
+Hello this is a test
 
-# 🤖 Project Title
+# Introduction 
 
-**Team members:** 
+### What is Brexit 
 
-- [Member 1]()
-- [Member 2]()
-- [Member 3]()
 
-## 📝 Project Description
-This project investigates sentiment around Brexit. (Description)
+### Motivation
 
-## 📊 Data
+### Research Design / Project Flow Diagram
+# Initial Data Collection 
 
-## 📈 Analysis
+### 
 
-## 🖼️ Results
+### 
 
-## 🖋️ Conclusions
 
-## 📚 References
+# Data Analysis 
+
+# Discussion of Results 
+
+# Conclusion 
+
+## What is Starcraft II?

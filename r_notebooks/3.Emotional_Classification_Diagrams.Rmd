@@ -1,0 +1,195 @@
+```{r}
+library(jsonlite);library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(syuzhet); library(lubridate); library(ggrepel); library(directlabels); library(ggthemes); library(sentimentr); library(gridExtra); library(plotly); library(scales)
+```
+
+```{r}
+#Naive Emotional Classification
+emotion1 <- filtered %>% sentimentr::get_sentences() %>% sentimentr::emotion()
+```
+
+```{r}
+#Time Graph of Emotions
+emotion2 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
+  group_by(url, emotion_type) %>% #group by url link (i.e each news article) and emotions 
+  summarise(Emotion_Percentage = sum(emotion_count)) %>% 
+  pivot_wider(names_from = emotion_type, values_from = Emotion_Percentage) %>% #rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated,-disgust_negated, -trust) %>% #removes selected emotions
+   mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
+  arrange(Date) %>% 
+  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
+  group_by(Year) %>% 
+  summarise(across(everything(), mean, na.rm = TRUE)) %>% #get average percentages for each year. 
+  pivot_longer(-c("Date","url", "Year", "rowSum"), names_to = "Emotion", values_to = "Percentage") 
+head(emotion2)
+summary(emotion2)
+```
+
+
+```{r}
+#GGplot
+plot1 <- ggplot(emotion2, aes(x = Year, y = Percentage, group = Emotion)) + 
+  geom_line(aes(color = Emotion)) +
+  labs(x = NULL) + 
+    theme_fivethirtyeight()
+```
+
+```{r}
+#Plotifying for interactive labels
+plot2 <- ggplotly(plot1, tooltip = c("y", "group"), style = ggplot2) %>%
+  layout(title = list(text = paste0("Reddit Emotional Prevalence between 2016-2023", "<br>", "<sup>", "Which emotions dominated Brexit-related reddit discussions over time?", "</sup>")), 
+         legend = list(orientation = "h", xanchor = "center", x = 0.5), 
+         yaxis = list(title = "Emotion Frequency Percentage (%)")) %>% 
+  config(displayModeBar = FALSE)
+plot2
+```
+
+```{r}
+score1 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
+  group_by(url, emotion_type) %>% #group by url link (i.e each news article/post) and emotions 
+  summarise(Mean_Score = mean(score)) %>% 
+  pivot_wider(names_from = emotion_type, values_from = Mean_Score) %>% #gets data in desired format of where rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated, -disgust_negated, -trust) %>% 
+  mutate(Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% #attaches date of the Brexit url and converts it to date format. the dates should correspond to the correct urls as both Atop_Brexit_url and filteredemotion1 have been arranged from earliest to latest date. 
+  arrange(Date) %>% 
+  group_by(Year) %>% 
+  summarise(across(everything(), mean, na.rm = TRUE)) %>% #get average percentages for each year. 
+  pivot_longer(-c("Date","url", "Year"), names_to = "Emotion", values_to = "Mean Score") 
+head(score1)
+summary(score1)
+```
+linewidth = ifelse(Emotion == "Postmean", 1.5, 1), linetype = ifelse(Emotion == "Postmean", "dashed", "solid"))
+    scale_linetype_manual(values = c(Postmean = "dashed")) +
+
+```{r}
+scoreplot1 <- ggplot(score1, aes(x = Year, y = `Mean Score`, group = Emotion)) + 
+  geom_line(aes(color = Emotion)) +
+  labs(x = NULL) + 
+    theme_fivethirtyeight()
+```
+
+```{r}
+scoreplot2 <- ggplotly(scoreplot1, tooltip = c("y","group"), style = ggplot2) %>%
+  layout(title = list(text = paste0("Reddit Emotional Score Associations between 2016-2023", "<br>", "<sup>", "Which emotional comments were associated with the highest scores (upvotes-downvotes) and how did it change over time?", "</sup>")), 
+         legend = list(orientation = "h", xanchor = "center", x = 0.5), 
+         yaxis = list(title = "Mean Score Associated with each emotion")) %>% 
+  config(displayModeBar = FALSE) # put legend in center of x-axis 
+scoreplot2
+```
+
+What are the disgust-related topics discussing?  
+```{r}
+#Custom Stopword DF
+word <- c("British", "pro", "left", "right", "anti", "leave","hard", "yeah", "gt", "brexit", "https", "http", "lot", "amp", "single")
+dfcustomstop_words <- as.data.frame(word)
+```
+
+```{r}
+#What are the disgust Comment Topics? 
+disgust1 <- emotion1 %>% filter(emotion_type == "disgust" & emotion_count > 0) %>% tibble() %>% unnest_tokens(word,comment) %>% left_join(sentiments, by = "word") %>% anti_join(stop_words, by = "word") %>% anti_join(dfcustomstop_words, by = "word") %>% arrange(timestamp) %>% mutate(sentiments = as.factor(sentiment)) %>% filter(is.na(sentiment)) %>% count(word, sort = T) %>% rename(freq = n) %>% mutate(percentage = freq/sum(freq)) %>% top_n(50, wt = freq) %>% select(-freq)
+wordcloud2(disgust1, shape = "circle")
+dim(disgust1); summary(disgust1)
+```
+
+```{r}
+#Compared to All Comment Topics
+gen1 <- emotion1 %>% filter(emotion_count > 0) %>% tibble() %>% unnest_tokens(word,comment) %>% left_join(sentiments, by = "word") %>% anti_join(stop_words, by = "word") %>% anti_join(dfcustomstop_words, by = "word") %>% arrange(timestamp) %>% mutate(sentiments = as.factor(sentiment)) %>% filter(is.na(sentiment)) %>% count(word, sort = T) %>% rename(freq = n) %>% mutate(percentage = freq/sum(freq)) %>% top_n(50, wt = freq) %>% select(-freq)
+wordcloud2(gen1, shape = "circle")
+dim(gen1); summary(gen1)
+```
+
+```{r}
+#Similarity Matrix
+frequency <- bind_rows(mutate(disgust1, source = "disgust"),
+                       mutate(gen1, source = "general")) %>% 
+  pivot_wider(names_from = source, values_from = percentage) %>% 
+  filter(!is.na(disgust) & !is.na(general))
+dim(frequency); summary(frequency)
+```
+
+
+```{r}
+library(plotly)
+library(scales)
+
+# Modify the original ggplot code
+similarity1 <- ggplot(frequency, aes(x = general, y = `disgust`, color = abs(`disgust` - general))) +
+  geom_abline(color = "gray40", lty = 2) +
+  geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
+  geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
+  geom_point(aes(text = paste(
+    "Word:", word,    
+    "\nLog % Diff:", frequency$disgust - frequency$general)), alpha = 0) + 
+  scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75", guide = "none") +
+  theme(legend.position = "none") +
+  scale_x_log10(labels = percent_format()) +
+  scale_y_log10(labels = percent_format()) +
+  ylab("Disgust Comment Word Prevalence, log (%)") + 
+  xlab("General Comment Word Prevalence, log (%)") +
+  theme_fivethirtyeight()
+
+# Convert the modified ggplot to a Plotly object
+similarity2 <- ggplotly(similarity1, tooltip = c("text")) %>%
+  layout(title = list(text = "How similar are the words in disgust-expressing comments to all other comments?"), 
+         xaxis = list(title = "General Comment Word Prevalence, log (%)"),
+         yaxis = list(title = "Disgust Comment Word Prevalence, log (%)"), margin = list(t= 50)) %>%
+  config(displayModeBar = FALSE) %>% 
+  layout(showlegend = FALSE)
+
+# Display the plot
+similarity2
+```
+
+  summarise(across(everything(), mean, na.rm = TRUE)) #get average percentages for each year. 
+
+score1 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
+  group_by(url, emotion_type) %>% #group by url link (i.e each news article/post) 
+  summarise(Mean_Score = mean(score)) %>% 
+  pivot_wider(names_from = emotion_type, values_from = Mean_Score) %>% #gets data in desired format of where rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated, -disgust_negated, -trust) %>% 
+  mutate(Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% #attaches date of the Brexit url and converts it to date format. the dates should correspond to the correct urls as both Atop_Brexit_url and filteredemotion1 have been arranged from earliest to latest date. 
+  arrange(Date) %>% 
+  group_by(Year) %>% 
+  summarise(across(everything(), mean, na.rm = TRUE)) %>% #get average percentages for each year. 
+  pivot_longer(-c("Date","url", "Year"), names_to = "Emotion", values_to = "Mean Score") 
+head(score1)
+summary(score1)
+ %>% filter(emotion_count > 0)
+   summarise(across(everything(), mean, na.rm = TRUE)) %>% 
+
+```{r}
+articleemotion1 <- Atop_Brexit_urls %>% sentimentr::get_sentences() %>% sentimentr::emotion() 
+articleemotion2 <- articleemotion1 %>% arrange(timestamp) %>% group_by(url, emotion_type) %>% 
+  summarise(Emotion_Percentage = sum(emotion_count)) %>% #group by url link (i.e each news article/post) 
+  pivot_wider(names_from = emotion_type, values_from = Emotion_Percentage) %>% #gets data in desired format of where rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated, -disgust_negated, -trust) %>% 
+  mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
+  arrange(Date) %>% 
+  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
+  group_by(Year) %>% 
+```
+
+```{r}
+
+emotion3 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
+  group_by(url, emotion_type) %>% #group by url link (i.e each news article) and emotions 
+  summarise(Emotion_Percentage = sum(emotion_count)) %>% 
+  pivot_wider(names_from = emotion_type, values_from = Emotion_Percentage) %>% #rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated,-disgust_negated, -trust) %>% #removes selected emotions
+   mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
+  arrange(Date) %>% 
+  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
+  group_by(Year) %>% 
+  rename("Reddit Link" = url)
+
+df_onlynews<- left_join(df_news,emotion3,by = "Reddit Link") 
+df filter(!is.na(`News Link`) | !is.na())
+
+```
+
+
+
