@@ -23,11 +23,11 @@ $source env/bin/activate
 3. Run code in virtual environment 
 
 ## How to Recreate (R portions)
-1. Clone the repository to your local machine
-2. Set up the virtual env and install the dependencies:
+1. Clone this repository to your local machine.
+2. Open a terminal and navigate to the root of this repository.
+3. Open the R console in this same directory and install `renv` package:
+```r
+install.packages("renv")
 ```
-$python3 -m venv env
-$source env/bin/activate
-(env)$pip install -r requirements.txt
-```
-3. Run code in virtual environment 
+4. Run `renv::restore()` to install all the packages needed for this project
+5. Run code in virtual environment 
