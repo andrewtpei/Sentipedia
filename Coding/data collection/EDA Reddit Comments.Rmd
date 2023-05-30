@@ -8,11 +8,3 @@ hist(df_filtered$date, main = "Reddit Posts Frequencies over time", breaks = 20,
 
 ```
 
-```{r}
-
-```
-
-```{r}
-
-```
-
