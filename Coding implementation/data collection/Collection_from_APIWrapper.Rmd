@@ -1,8 +1,7 @@
 ```{r}
 #Relevant Packages: 
-library(jsonlite);library(RedditExtractoR);library(tidyverse); library(tidytext); library(wordcloud2); library(textdata); library(widyr)
+library(RedditExtractoR);library(tidyverse); library(tidytext); library(wordcloud2); library(textdata); library(widyr)
 ```
-
 OBTAINING AND FILTERING DATA: 
 ```{r}
 #Returns a dataframe with the threads and basic info (e.g comments, date of post, content of post, and crucially the comment url)
@@ -15,19 +14,19 @@ threads_contents <- get_thread_content(Atop_Brexit_urls$url)
 ```
 
 ```{r}
-#Cleaning of the two main dataframes, df_Brexit and threads_content 
+#Indexing of df_Brexit (comments dataframe) and filtering to get df_filtered, which is a column that only discusses Brexit. 
 df_Brexit <- threads_contents[["comments"]] %>% select(-c("author", "upvotes", "downvotes")) %>% filter(!str_detect(comment, regex("deleted", ignore_case = TRUE)))
 dim(df_Brexit); summary(df_Brexit); head(df_Brexit)
-filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE)));dim(filtered); summary(filtered)
-dim(filtered); summary(filtered); summary(filtered)
+df_filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE)));dim(filtered); summary(filtered)
+dim(df_filtered); summary(df_filtered); dim(df_Brexit); summary(df_Brexit)
 ```
 
 ```{r}
 #News Article Titles over Time
+df_news <- read_csv("William's Part/df_news.csv")
 Atop_Brexit_urls1 <- rename(Atop_Brexit_urls, "Reddit Link" = url)
 Brexit_titles_time<- left_join(df_news,Atop_Brexit_urls1, by = "Reddit Link")
 Brexit_titles_timefiltered <- filter(Brexit_titles_time, !is.na(`News Link`) & !is.na(timestamp))
-
 ```
 
 ```{r}

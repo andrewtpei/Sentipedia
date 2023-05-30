@@ -1,11 +1,13 @@
-# **Bigram Network Diagrams**
 ```{r}
-library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(syuzhet); library(gridExtra); library(gridGraphics); library(ggplotify); library(plotly); library(ggwordcloud)
+library(RedditExtractoR);library(tidyverse);library(tidytext); library(wordcloud2); library(textdata); library(gridExtra); library(gridGraphics); library(ggplotify); library(plotly); library(ggwordcloud)
 ```
 
+```{r}
+reddit_Brexit <- read_csv("~/Downloads/sentipedia/Coding implementation/nltk/reddit_Brexit.csv")
+```
 
 ```{r}
-df_bigrams <- df_Brexit %>%
+df_bigrams <- df_filtered %>%
   unnest_tokens(bigram, comment, token = "ngrams", n = 2) %>%
   filter(!is.na(bigram))
 bigrams_separated <- df_bigrams %>% separate(bigram, c("word1", "word2"), sep = " ")
@@ -31,10 +33,6 @@ bigrams_separated2 <- bigrams_united[(round(n/4) + 1):round(n/2), ]
 bigrams_separated3 <- bigrams_united[(round(n/2) + 1):round(3*n/4), ]
 bigrams_separated4 <- bigrams_united[(round(3*n/4) + 1):n, ]
 ```
-
-#Final Word Cloud Output
-par(mfrow=c(2,2))
-set.seed(123)
 
 ```{r}
 #Emotional bigram wordcloud over time: 

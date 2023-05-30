@@ -4,7 +4,7 @@ library(RedditExtractoR);library(tidyverse);library(tidytext); library(wordcloud
 
 ```{r}
 #Naive Emotional Classification
-emotion1 <- filtered %>% sentimentr::get_sentences() %>% sentimentr::emotion()
+emotion1 <- df_filtered %>% sentimentr::get_sentences() %>% sentimentr::emotion()
 ```
 
 ```{r}
@@ -133,39 +133,3 @@ similarity2 <- ggplotly(similarity1, tooltip = c("text")) %>%
 # Display the plot
 similarity2
 ```
-
-```{r}
-articleemotion1 <- Atop_Brexit_urls %>% sentimentr::get_sentences() %>% sentimentr::emotion() %>% rename("Reddit Link" = url) %>% arrange(date_utc)
-articleemotion2 <- left_join(df_news, articleemotion1, by = "Reddit Link")
-articleemotion2 <- articleemotion1 %>% arrange(timestamp) %>% group_by(url, emotion_type) %>% 
-  summarise(Emotion_Percentage = sum(emotion_count)) %>% #group by url link (i.e each news article/post) 
-  pivot_wider(names_from = emotion_type, values_from = Emotion_Percentage) %>% #gets data in desired format of where rows correspond to each post and columns are counts of each emotion. 
-  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
-  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated, -disgust_negated, -trust) %>% 
-  mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
-  arrange(Date) %>% 
-  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
-  group_by(Year) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) #warning message is expected, it attempted to summarise the non-numeric/factor urls which do not form part of the analysis. 
-```
-
-```{r}
-emotionrenamed <- rename(emotion1, "Reddit Link" = url)
-emotion4 <- left_join(df_news,)
-emotion3 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
-  group_by(url, emotion_type) %>% #group by url link (i.e each news article) and emotions 
-  summarise(Emotion_Percentage = sum(emotion_count)) %>% 
-  pivot_wider(names_from = emotion_type, values_from = Emotion_Percentage) %>% #rows correspond to each post and columns are counts of each emotion. 
-  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
-  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated,-disgust_negated, -trust) %>% #removes selected emotions
-   mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
-  arrange(Date) %>% 
-  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
-  group_by(Year) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) %>% #warning message is expected, it attempted to summarise the non-numeric/factor urls which do not form part of the analysis. 
- mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100)))
-
-```
-
-
-
