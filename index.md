@@ -5,6 +5,7 @@ title: Sentipedia - Analyzing Emotions and Sentiment Around Brexit
 
 Group members: Vaibhav V, Andrew Pei, Vincent Wei, ChakHa Yeung
 
+<br>
 # 1. Introduction 
 
 ## 1.1 What is Brexit 
@@ -44,7 +45,8 @@ Following the extraction, both data frames undergo cleaning and wrangling using 
 The final output of our analysis takes the form of visualizations, including line charts, word clouds, and bar charts, among others. These visualizations provide a comprehensive representation of the findings derived from our data analysis process.
 
 ![figure](Figures/Project_Flow.png)
-     
+
+<br>
 # 2.Initial Data Collection 
 
 ## Reddit Comments Data
@@ -130,9 +132,9 @@ The word clouds generated from news texts and news summaries provide consistent 
 ![figure](Figures/frequency.png)
 
 The consistency between the two frequency tables further reinforces the prevalent sentiment surrounding Brexit. The fact that the terms "no" and "leave" have the highest frequencies in both tables indicates a common theme of scepticism and a desire for separation from the EU among the news articles that were scraped as a data source. The frequent appearance of "no" suggests resistance or opposition to specific aspects of Brexit, such as proposed policies or negotiation outcomes. This indicates that there are concerns or objections regarding certain elements of the Brexit process. Additionally, the high frequency of "leave" highlights the continued focus on the decision made by the United Kingdom to exit the European Union. It underscores the ongoing discussions and implications associated with this monumental choice. Overall, these consistent results highlight the prevalent sentiments of scepticism, resistance, and attention to the decision to leave the EU in the news articles analysed
-!
 
 
+<br>
 # 3. Data Analysis 
 ## 3.1 Method Choice and Reasoning for Emotional Analysis
 ### 3.1.1 Emotional Word Clouds Method Reasoning: 
@@ -227,6 +229,7 @@ def get_nouns(tokens):
         return None
 ```
 
+<br>
 # 4.Discussion of Results 
 ## 4.1 Emotional Classification Results Analysis
 
@@ -266,22 +269,28 @@ By examining the nouns associated with positive comments and news articles conce
 
 However, it is important to recognize the limitations inherent in analyzing common nouns associated with Brexit. When considering nouns associated with both positive and negative aspects of Brexit, we observe a striking similarity, providing limited direct insight into the distinctions between these two aspects. This lack of differentiation may arise due to the sheer quantity of data analyzed, as key aspects of Brexit could potentially be overshadowed by the prevalence of high-frequency words.
 
+<br>
 # 5.Conclusion 
 
-In conclusion, we were able to use a variety of data analysis methods to investigate the sentiment expressed by Reddit comments surrounding Brexit. We were able to answer our motivating question, is it true that people disagree with Brexit more and more through emotional classification. Negative emotions seemed to increase over time, specifically fear, anger and disgust. We feel like the true increase in negative sentiment may be understated by our difficulty classifying sarcasm as negative emotion.
+In conclusion, our research employed various data analysis methods to investigate the sentiment expressed in Reddit comments regarding Brexit. Through emotional classification and sentiment analysis, we were able to address our initial question concerning the evolving opinions towards Brexit. The findings revealed an increasing prevalence of negative emotions over time, particularly fear, anger, and disgust. Furthermore, the sentiment expressed in Reddit comments demonstrated a shift towards the negative, deviating from traditional polling results. However, it is important to acknowledge that the true extent of negative sentiment may be underestimated due to challenges in accurately classifying sarcasm as a negative emotion and the generalized approach utilized for sentiment estimation.
+In general, polls appeared to reasonably reflect public opinion and justified their continued usage. However, they seemed to inadequately capture the sentiment of the younger generation, particularly in contrast to the sentiment observed in our previous analysis. This raises questions about the effectiveness of polls as a new generation matures and their perspectives become more influential.
 
-We also gained insight into whether there were differences in sentiment surrounding Brexit in the news compared to social media. We found that news articles were more critical of Brexit in comparison to public opinion, especially over time as sentiment in news articles declined much more steeply over time in comparison to sentiment in Reddit comments.
+Moreover, our analysis shed light on the disparity in sentiment between news articles and social media discussions concerning Brexit. The study revealed that news articles tended to adopt a more critical stance towards Brexit compared to public opinion, especially as sentiment in news articles exhibited a more pronounced decline over time than sentiment in Reddit comments. Furthermore, negative opinions expressed by young people on the internet often relied on generalizations, while negative news articles adopted a more specific and nuanced approach.
 
-In order to develop our research further, and if we had more time, we could have tried to develop our own emotional classification model with the goal of being more tailored to the topic of Brexit and perhaps able to detect sarcasm more effectively. Additionally, we could have zoomed into specific events, such as key speeches or ad campaigns. This would allow us to analyse the impact they had on sentiment, which could prove to be a useful tool to politicians as they try and decide where they allocate their campaign resources.
+It is important to note that our research had certain limitations. The challenges in accurately classifying sarcasm as a negative emotion, as well as the generalized approach used for sentiment estimation, may have influenced the overall findings. Additionally, the analysis focused on sentiment expressed on Reddit and news articles, and thus, the results may not be fully representative of the entire population's sentiment towards Brexit.
 
-Furthermore, sentiment analysis like this could have wider implications as they give us different insights into what people are thinking. Many financial institutions such as the Bank of England spend vast amounts of money trying to predict people's expectations of key parameters like inflation, which they use to help set the interest rate. If data analysis methods like the ones we used can be used to create more accurate forecasts, this could have real-world benefits in the form of reduced unemployment and increased economic growth.
+Further research could explore alternative methods to address the challenges associated with sarcasm detection and refine sentiment analysis techniques. Additionally, investigating the reasons behind the disparity between young people's sentiment and traditional polling results could provide valuable insights into the changing dynamics of public opinion. Overall, our research contributes to a better understanding of sentiment dynamics surrounding Brexit and highlights the complexities involved in capturing and interpreting public sentiment in the digital age.
 
+<br>
 # 6. Footnotes
 
 https://aclanthology.org/D13-1066.pdf 
 https://www.theguardian.com/politics/ng-interactive/2023/jan/30/changing-attitudes-to-brexit-three-years-on)
 https://fivethirtyeight.com/features/nonresponse-bias-ipsos-poll-findings/
- 
+https://thrivemyway.com/reddit-statistics/#:~:text=The%20average%20age%20of%20Reddit,of%20getting%20their%20college%20degrees
+https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
+
+<br>
 # 7. Contributions Table
 ![figure](Figures/Contributions.png)
 
