@@ -46,7 +46,6 @@ Following the extraction, both data frames undergo cleaning and wrangling using 
 The final output of our analysis takes the form of visualizations, including line charts, word clouds, and bar charts, among others. These visualizations provide a comprehensive representation of the findings derived from our data analysis process.
 
 ![figure](Figures/Project_Flow.png)
-<img src="Figures/Project_Flow.png" width="auto" height="500" />
      
 # 2.Initial Data Collection 
 For our sentiment analysis on Brexit, we utilized the Reddit Extractor tool within RStudio to gather comments specifically related to Brexit from the dedicated Brexit subreddit. From this subreddit, we further scraped the news links associated with the discussions to acquire additional data from various news sources. This multi-layered approach enabled us to collect a comprehensive dataset encompassing both user-generated content and news articles, enhancing the breadth and depth of our analysis on Brexit sentiment.
