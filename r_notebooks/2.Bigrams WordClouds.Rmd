@@ -38,14 +38,8 @@ set.seed(123)
 
 ```{r}
 #Emotional bigram wordcloud over time: 
-bicloud1 <- bigrams_separated1 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud2<- bigrams_separated2 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud3 <- bigrams_separated3 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud4 <- bigrams_separated4 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n) #Converting the 4 split bigrams into a wordcloudable format. 
-
-wordcloud2(bicloud1, shape = "circle", fontFamily = "mono")
-layout(matrix(c(1, 2), nrow=2), heights=c(1, 4))
-par(mar=rep(0, 4))
-plot.new()
-text(x = 0.5, y = 0.5, "2016-2017", cex = 1.5, font = 2)
-
+bicloud1 <- bigrams_separated1 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud2<- bigrams_separated2 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud3 <- bigrams_separated3 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud4 <- bigrams_separated4 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n)
+#Converting the 4 split bigrams into a wordcloudable format. 
 #Convert into 4 word clouds covering different time periods
 cloud1<- wordcloud2(bicloud1, shape = "circle", fontFamily = "mono"); cloud2<- wordcloud2(bicloud2, shape = "circle", fontFamily = "mono"); cloud3<- wordcloud2(bicloud3, shape = "circle", fontFamily = "mono"); cloud4 <- wordcloud2(bicloud4, shape = "circle", fontFamily = "mono") 
 
