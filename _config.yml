@@ -1,7 +1,7 @@
-title: DS105L 
+title: Sentipedia
 email: a.pei@lse.ac.uk
 description: > # this means to ignore newlines until "baseurl:"
-  DS105L is a course on data science for the social sciences.
+  Using Python and R to conduct emotional and sentiment analysis on the issue of Brexit.
 base_url: "/sentipedia"
 url: "https://andrewtpei.github.io/sentipedia/"
 

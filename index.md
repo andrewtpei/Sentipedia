@@ -1,4 +1,7 @@
-# Sentipedia: Analyzing Sentiment of Brexit Within Reddit and News 
+---
+layout: home
+---
+# Sentipedia: Analyzing Emotions and Sentiment Around Brexit 
 Hello this is a test
 
 # Introduction 
