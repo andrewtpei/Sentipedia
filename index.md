@@ -46,8 +46,38 @@ _“I'm wondering if their support was decided upon because they felt there was 
 
 ### 3.2 Emotional Word Clouds and Classification Implementation: 
 We first preprocessed comments by tokenising into word pairs (bigrams) that are separated into two columns, before removing stop words using a dataframe (stop_words) from the tidytext package and ‘non-emotional words’ based on whether it appears in a sentiment dictionary (sentiment).
+```r
+df_bigrams <- df_filtered %>%
+  unnest_tokens(bigram, comment, token = "ngrams", n = 2) %>% #tokenised into bigrams 
+  filter(!is.na(bigram)) #removed NA values
+bigrams_separated <- df_bigrams %>% separate(bigram, c("word1", "word2"), sep = " ") #separated the bigrams into two word columns to allow the filtering out of stopwords and non-emotional words
 
+custom_stopwords <- c("http", "amp", "https", "gt", "xit", "news", "wiki", "makes", "mail", "brexit") #custom stopwords for specific words not listed in the tidytext dataframe. 
+bigrams_filtered <- bigrams_separated %>% 
+  filter(!word1 %in% stop_words$word & !word2 %in% stop_words$word) %>% #uses a stopword dataframe from the tidytext package
+  filter(word1 %in% sentiments$word | word2 %in% sentiments$word) %>% 
+  filter(!word1 %in% custom_stopwords & !word2 %in% custom_stopwords)
+
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+```
 Preprocess comments by tokenising each comment into individual sentences, before running sentimentr’s off-the-shelf emotion() function to get the recorded number of emotional instances for each sentence in a relatively clean dataframe (emotion1). That dataframe is then filtered to remove instances where 0 emotions were recorded for a particular sentence, before additional tidyverse functions were used to wrangle the data frames into a desired format for visualisation. 
+
+```r
+emotion1 <- df_filtered %>% sentimentr::get_sentences() %>% sentimentr::emotion() #off the shelf emotional classification
+emotion2 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
+  group_by(url, emotion_type) %>% #group by url link (i.e each news article) and emotions 
+  summarise(Emotion_Percentage = sum(emotion_count)) %>% 
+  pivot_wider(names_from = emotion_type, values_from = Emotion_Percentage) %>% #rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated,-disgust_negated, -trust) %>% #removes selected emotions
+   mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
+  arrange(Date) %>% 
+  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
+  group_by(Year) %>% 
+  summarise(across(everything(), mean, na.rm = TRUE)) %>% #get average percentages for each year. 
+  pivot_longer(-c("Date","url", "Year", "rowSum"), names_to = "Emotion", values_to = "Percentage") 
+```
 
 # 4.Discussion of Results 
 ### 4.1 Emotional Classification Results Analysis
