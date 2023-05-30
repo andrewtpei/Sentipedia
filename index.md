@@ -73,9 +73,9 @@ emotion2 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% 
   select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated,-disgust_negated, -trust) %>% #removes selected emotions
    mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
   arrange(Date) %>% 
-  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
+  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert all the emotion count columns into percentages 
   group_by(Year) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) %>% #get average percentages for each year. 
+  summarise(across(everything(), mean, na.rm = TRUE)) %>% #get average percentages for each year, warning messages expected as   irrelevant, non-numeric chunks are also summarised 
   pivot_longer(-c("Date","url", "Year", "rowSum"), names_to = "Emotion", values_to = "Percentage") 
 ```
 
