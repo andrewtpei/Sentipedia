@@ -79,14 +79,14 @@ by utilizing the newspaper3k package, we downloaded the news articles associated
 Note that since some subreddits are not linked to a news article, we put “NaN” as the value for these.
 An example of skipped article
 
-![figure](Figures/get link.png)
+![figure](Figures/get_link.png)
 
 Also, some newspaper sources do not allow free access. So, we skipped approximately 10 articles using the try except method demonstrated below.
 
-![figure](Figures/skip article.png)
+![figure](Figures/skip_article.png)
 
 An example of skipped article
-![figure](Figures/error example.png)
+![figure](Figures/error_example.png)
 
 ## Cleaning News Article Data
 Our obtained news contents presented us challenges with cleaning the data frame due to the presence of a significant amount of noise from website loading, and in the form of advertisements and unrelated text, such as “Sign up to our free Brexit and beyond email for the latest headlines on what Brexit is meaning for the UK. Since different websites have different types of “unwanted texts” we employed the T5 (Text-To-Text Transfer Transformer) model from the Hugging Face's Transformers library to generate summaries of each news article. The T5 model was trained on a diverse range of internet text and can perform a wide variety of NLP tasks, making it a perfect fit for our purpose.
@@ -119,11 +119,11 @@ We collected 145 news articles from the reddit links. For the subreddit posts th
 
 ## Word Cloud for Text 
 
-![figure](Figures/wc text.png)
+![figure](Figures/wc_text.png)
 
 ## Word Cloud for Summaries 
 
-![figure](Figures/wc summaries.png)
+![figure](Figures/wc_summaries.png)
 
 The word clouds generated from news texts and news summaries provide consistent insights into the sentiment and key themes surrounding Brexit. In both word clouds, the term "leave" stands out prominently, highlighting the enduring impact of the decision to exit the European Union. The presence of the word "party" in both word clouds suggests the involvement of political parties and their role in shaping the Brexit narrative. Additionally, the word "crisis" in the word cloud for news summaries reflects the persistent challenges and uncertainties associated with Brexit. However, amidst the turmoil, the word "good" emerges, potentially signifying positive aspects or perceived advantages of the situation. Together, these words capture the complexity and multifaceted nature of sentiment and opinions surrounding Brexit, highlighting the ongoing debates and diverse perspectives on this ongoing issue.
 
