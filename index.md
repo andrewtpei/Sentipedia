@@ -36,7 +36,8 @@ Our project flow is summarised in the diagram below. Because reddit’s official
 The package also simplifies the data collection process, with just a single command needed to extract a complete data frame (top_Brexit_urls) containing the post url, timestamp, and title text. A second command then extracts the post contents into a list of dataframes (thread_contents) where the comments are indexed into a 2nd dataframe (df_Brexit). We then filtered for comments that contained the word "Brexit", which we will use for our subsequent emotional and sentimental analysis. Following the extraction, both dataframes are cleaned and wrangled using pandas from python and tidyverse in R; this process will be further detailed in the cleaning and EDA section. For subsequent analysis, with additional details and justifications provided in the section 6, thread_df’s post urls are web-scraped to obtain the article content, whereas comment_df will be preprocessed via tidytext and NLTK to assess both emotions and sentiment. The final output is then generated in the form of visualisations such as line charts, wordclouds, and barcharts. 
 
 ![figure](Figures/Project_Flow.png)
-
+<img src="Figures/Project_Flow.png" width="auto" height="500" />
+     
 # 2.Initial Data Collection 
 
 ## 2.1 EDA of Reddit Post/Threads Dataframe 
