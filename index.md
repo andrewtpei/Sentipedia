@@ -46,9 +46,27 @@ The final output of our analysis takes the form of visualizations, including lin
 ![figure](Figures/Project_Flow.png)
      
 # 2.Initial Data Collection 
-For our sentiment analysis on Brexit, we utilized the Reddit Extractor tool within RStudio to gather comments specifically related to Brexit from the dedicated Brexit subreddit. From this subreddit, we further scraped the news links associated with the discussions to acquire additional data from various news sources. This multi-layered approach enabled us to collect a comprehensive dataset encompassing both user-generated content and news articles, enhancing the breadth and depth of our analysis on Brexit sentiment.
-### Reddit Comment Data
-Our first data source was the comment section of the Brexit subreddit. For the extraction of data, we used the Reddit Extractor in RStudio, a wrapper for Reddit's API. This enabled us to directly interact with Reddit's API, allowing us to pull relevant data such as user comments, comment timestamps, and upvote ratios. We employed parameters such as time range and comment quantity to fine-tune our data collection process. The collected comments were subsequently stored for further analysis, enabling us to gain insights into the sentiments expressed within the Brexit subreddit on Reddit. 
+
+Our first data source was the post threads of the united kingdom subreddit. For the extraction of data, we used the Reddit Extractor in RStudio, a wrapper for Reddit's API. This enabled us to directly interact with the Reddit API and bypass some data access limitations, allowing us to easily pull relevant data such as user post title, post url, and upvote to downvote ratios (score). However, there still remains a limit on the number of total posts that can be pulled with if you specify by “top” (229). We ultimately decided against using other parameters, such as “relevant”, because even though it gets more posts (over 900) the overall number of comments is fewer because it pulls lower-engagement posts. It also increases the likelihood of the post not being a news article, which undermines our desired analysis of interacting redditors and news articles. We employed parameters such as time range and subreddit to fine-tune the query for posts. As mentioned in the project flow section, we ultimately choose the unitedkingdom subreddit as it targets a young, but on paper not overly left-wing, online audience. The figure below shows the head of the initial extracted dataframe (Atopbrexiturl) and the code used to obtain the data.  
+
+```r
+top_Brexit_urls <- find_thread_urls(subreddit = "unitedkingdom", keywords = "Brexit", sort_by = "top", period = "all"); 
+top_Brexit_urls$date_utc <- as.Date(top_Brexit_urls$date_utc)
+Atop_Brexit_urls <- arrange(top_Brexit_urls, date_utc)
+```
+![figure](Figures/AtopBrexit_urls.png)
+
+We then used the get_thread_content command to get the content of the post threads by feeding it the url column. This procedure is shown below, with immediate data cleaning performed to remove deleted comments and filtering by comments that only contain Brexit. 
+Filtering to only Brexit comments (df_filtered) is done because reddit is notorious for having [unrelated comment threads](https://www.reddit.com/r/AskReddit/comments/5g7apu/why_do_redditors_so_easily_go_off_on_tangents_and/)  not even discussing vaguely related topics. 
+
+```r
+threads_contents <- get_thread_content(Atop_Brexit_urls$url) 
+df_Brexit <- threads_contents[["comments"]] %>% select(-c("author", "upvotes", "downvotes")) %>% filter(!str_detect(comment, regex("deleted", ignore_case = TRUE))) #index out a dataframe from the thread url, filter out deleted comments. 
+df_filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE))) #exclude to comments that mention Brexit
+```
+![figure](Figures/df_Brexit.png)
+
+
 ### News Article Data
 In our next step, we chose to extract news links connected to the subreddit discussions due to the challenges associated with retrieving older news articles using traditional methods such as News APIs. Given that sentiment analysis on Brexit encompasses a wide temporal range, it becomes increasingly difficult to obtain historical news data through APIs alone.
 
@@ -59,7 +77,6 @@ by utilizing the newspaper3k package, we downloaded the news articles associated
 
 Note that since some subreddits are not linked to a news article, we put “NaN” as the value for these.
 
-=======
 ## 2.1 EDA of Reddit Post/Threads Dataframe 
 Out of the 229 posts, we discovered around 150 of them contain news articles. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth
 
@@ -67,7 +84,6 @@ Out of the 229 posts, we discovered around 150 of them contain news articles. Fo
 Df_filtered has 11765 rows and 7 columns, with dates of comments ranging between 2016-06-24 to 2023-05-14 and an average "score" ( comment upvotes - downvotes) of roughly 22. We can find the default data types using the str command in R, which shows that only the url and comment columns are characters while the remaining 4 columns are numeric. To get a rough understanding of distributions for our relevant numeric variables, we plotted histograms of the date and score variable. It suggests there is a significant positive skew for the score variable, and and that a majority of the comments occurred in 2018-2019 and 2022-2023. However, we decided not to remove score outliers because engagement in social media platforms tends to be dominated by a small number of posts, so it is not unexpected that the distribution is non-normal. In addition, the score variable is not used as a predictor for emotional classification or sentiment analysis, so most of the results should not be affected. 
 
 ![figure](Figures/Reddit_Comm_Dist.png)
->>>>>>> 911ea49599686cd9435900d370536e3f64471536
 
 # 3. Data Analysis 
 ## 3.1 Method Choice and Reasoning for Emotional Analysis
@@ -164,7 +180,6 @@ def get_nouns(tokens):
 
 # 4.Discussion of Results 
 ## 4.1 Emotional Classification Results Analysis
-![figure](Figures/Reddit_Emotional_Prevalence.png) 
 
 According to the sentiment classifier as shown in the figure above, the frequency of most emotions within comments remained somewhat constant, with fluctuations occurring only by a few percentage points YoY. There are limited changes in the relative rankings, with disgust being the least common and anticipation being the most common expressed emotion throughout the period. 
 However, it is clear the ‘negative’ emotions of fear, anger, and disgust surpassed the ‘positive’ emotions of joy and anticipation, with the disparity gradually increasing over time. However, the dominance of negative emotions is probably understated; the simple dictionary-based sentiment classifier is unlikely to detect sarcasm, which in a social media context tends to employ positive words to describe a negative situation as noted by Riloff et al (2013) on twitter comments. Nevertheless, the diagram does paint a rough picture of the emotional distribution, which suggests negative emotions are becoming increasingly more prevalent compared to positive emotions. 
@@ -172,8 +187,6 @@ However, it is clear the ‘negative’ emotions of fear, anger, and disgust sur
 ![figure](Figures/Reddit_Score_Associations.png)
 
 The second diagram below shows the mean scores associated with most emotions fluctuated over time but remained relatively similar to each other for most of the time period. Its results reinforces the idea that there was some misclassification, because comments received a similar score despite negative emotions being prominent; one might expect the more positive emotions to have noticeably lower scores. However, a conspicuous exception is disgust, which was associated with an increasingly higher score compared to all other emotion despite being the least common emotion as shown in the previous diagram. 
-
-![figure](Figures/Word_Similarity_Diagram.png)
 
 The strong correlation between disgust and high scores suggests it was a less ‘controversial’ emotion - people have a universal distaste for the Brexit aftermath - compared to other emotions such as anger which could be perceived as misdirected. This in turn implies the correlation might be due to disgust comments being biased towards discussing less contentious topics. However, the figure below probably disproves this- general and disgust comments share over 40 out of the 50 most common non-emotional words, with almost no differences in the log percentage usage rate between shared words. Therefore, the results imply it is the feeling conveyed rather than the topics discussed that increased the average scores of disgust-conveying comments, thus making it a significant component over time. 
 
@@ -221,6 +234,7 @@ https://aclanthology.org/D13-1066.pdf
 https://www.theguardian.com/politics/ng-interactive/2023/jan/30/changing-attitudes-to-brexit-three-years-on)
 https://fivethirtyeight.com/features/nonresponse-bias-ipsos-poll-findings/
  
-# 7. Additions if less time constrained by team issues: 
-1. Had ggplotly diagrams that were interactive but did not have time to add them
+# 7. Contributions Table
+![figure](Figures/Contributions.png)
+
  
