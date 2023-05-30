@@ -106,9 +106,6 @@ In order to develop our research further, and if we had more time, we could have
 
 Furthermore, sentiment analysis like this could have wider implications as they give us different insights into what people are thinking. Many financial institutions such as the Bank of England spend vast amounts of money trying to predict people's expectations of key parameters like inflation, which they use to help set the interest rate. If data analysis methods like the ones we used can be used to create more accurate forecasts, this could have real-world benefits in the form of reduced unemployment and increased economic growth.
 
-![image](https://github.com/andrewtpei/Sentipedia/assets/128170829/9275dbf4-c9b6-4b92-afa9-a17595c755a3)
-
-
 # 6. Footnotes: 
 
 https://aclanthology.org/D13-1066.pdf 
