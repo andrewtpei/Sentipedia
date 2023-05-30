@@ -49,9 +49,9 @@ The final output of our analysis takes the form of visualizations, including lin
 
 <br>
 
-# 2.Initial Data Collection 
-
-## Reddit Comments Data
+# 2. Initial Data Collection 
+## 2.1 Collecting and Cleaning Data 
+### 2.1.1 Reddit Comments Data
 
 Our first data source was the post threads of the united kingdom subreddit. For the extraction of data, we used the Reddit Extractor in RStudio, a wrapper for Reddit's API. This enabled us to directly interact with the Reddit API and bypass some data access limitations, allowing us to easily pull relevant data such as user post title, post url, and upvote to downvote ratios (score). However, there still remains a limit on the number of total posts that can be pulled with if you specify by “top” (229). We ultimately decided against using other parameters, such as “relevant”, because even though it gets more posts (over 900) the overall number of comments is fewer because it pulls lower-engagement posts. It also increases the likelihood of the post not being a news article, which undermines our desired analysis of interacting redditors and news articles. We employed parameters such as time range and subreddit to fine-tune the query for posts. As mentioned in the project flow section, we ultimately choose the unitedkingdom subreddit as it targets a young, but on paper not overly left-wing, online audience. The figure below shows the head of the initial extracted dataframe (Atopbrexiturl) and the code used to obtain the data.  
 
@@ -72,7 +72,7 @@ df_filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_c
 ```
 ![figure](Figures/df_Brexit.png)
 
-## News Article Data
+### 2.1.2 News Article Data
 In our next step, we chose to extract news links connected to the subreddit discussions due to the challenges associated with retrieving older news articles using traditional methods such as News APIs. Given that sentiment analysis on Brexit encompasses a wide temporal range, it becomes increasingly difficult to obtain historical news data through APIs alone.
 
 
@@ -81,7 +81,6 @@ We were able to identify news links shared by community members. These news link
 by utilizing the newspaper3k package, we downloaded the news articles associated with the extracted news links. This approach ensured that our dataset includes timely and contextually relevant news content, enhancing the comprehensiveness and accuracy of our sentiment analysis on Brexit.
 
 Note that since some subreddits are not linked to a news article, we put “NaN” as the value for these.
-An example of skipped article
 
 ![figure](Figures/get_link.png)
 
@@ -90,7 +89,6 @@ Also, some newspaper sources do not allow free access. So, we skipped approximat
 An example of skipped article
 ![figure](Figures/error_example.png)
 
-## Cleaning News Article Data
 Our obtained news contents presented us challenges with cleaning the data frame due to the presence of a significant amount of noise from website loading, and in the form of advertisements and unrelated text, such as “Sign up to our free Brexit and beyond email for the latest headlines on what Brexit is meaning for the UK. Since different websites have different types of “unwanted texts” we employed the T5 (Text-To-Text Transfer Transformer) model from the Hugging Face's Transformers library to generate summaries of each news article. The T5 model was trained on a diverse range of internet text and can perform a wide variety of NLP tasks, making it a perfect fit for our purpose.
 We generated the summary with this code:
 
@@ -103,33 +101,24 @@ This approach helped us condense the articles to their core messages and mitigat
 
 One limitation might be summarisation using the T5 model may have resulted in the loss of some contextual nuances. Nevertheless, it provided us with a significantly cleaned dataset, ready for further analysis.
 
-### Data frame before cleaning
-
 ![figure](Figures/before.png)
-
-### Data frame after cleaning
-
 ![figure](Figures/after.png)
 
-## 2.1 EDA of Reddit Comments Dataframe (df_filtered) which contains "Brexit" 
+## 2.2 Exploratory Data Analysis of the Two Dataframe (Reddit Comments with Brexit and News Articles)
+### 2.2.1 Initial Data Summary 
 Df_filtered has 11765 rows and 7 columns, with dates of comments ranging between 2016-06-24 to 2023-05-14 and an average "score" ( comment upvotes - downvotes) of roughly 22. We can find the default data types using the str command in R, which shows that only the url and comment columns are characters while the remaining 4 columns are numeric. To get a rough understanding of distributions for our relevant numeric variables, we plotted histograms of the date and score variable. It suggests there is a significant positive skew for the score variable, and and that a majority of the comments occurred in 2018-2019 and 2022-2023. However, we decided not to remove score outliers because engagement in social media platforms tends to be dominated by a small number of posts, so it is not unexpected that the distribution is non-normal. In addition, the score variable is not used as a predictor for emotional classification or sentiment analysis, so most of the results should not be affected. 
 
 ![figure](Figures/Reddit_Comm_Dist.png)
 
-## 2.2 EDA of News Articles
 We collected 145 news articles from the reddit links. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth. For this section, we instead decided to play with some frequency diagrams and wordclouds to get an initial perspective on this textual dataset. 
 
-### Word Cloud for Text 
+### 2.2.2 Intial Data Visualization 
 
 ![figure](Figures/wc_text.png)
-
-### Word Cloud for Summaries 
 
 ![figure](Figures/wc_summaries.png)
 
 The word clouds generated from news texts and news summaries provide consistent insights into the sentiment and key themes surrounding Brexit. In both word clouds, the term "leave" stands out prominently, highlighting the enduring impact of the decision to exit the European Union. The presence of the word "party" in both word clouds suggests the involvement of political parties and their role in shaping the Brexit narrative. Additionally, the word "crisis" in the word cloud for news summaries reflects the persistent challenges and uncertainties associated with Brexit. However, amidst the turmoil, the word "good" emerges, potentially signifying positive aspects or perceived advantages of the situation. Together, these words capture the complexity and multifaceted nature of sentiment and opinions surrounding Brexit, highlighting the ongoing debates and diverse perspectives on this ongoing issue.
-
-### Frequency Table for Text vs Frequency Table for Summaries
 
 ![figure](Figures/frequency.png)
 
@@ -140,14 +129,14 @@ The consistency between the two frequency tables further reinforces the prevalen
 
 # 3. Data Analysis 
 ## 3.1 Method and Implementation of Emotional Analysis
-### 3.1.1 Emotional Word Clouds / Emotional Classification Method Reasoning: 
+### 3.1.1 Emotional Word Clouds / Emotional Classification Method Reasoning
 In order to extract more contextual information about the phrases used, two-word tokens were utilized instead of one-word tokens for the word clouds. This approach provided a deeper understanding of the specific context in which the phrases were employed. For instance, in the unigram clouds, the term 'pretty' appeared as a common 'emotional' word. However, it conveyed little information about the target of the emotion and merely served as an 'amplifier' for emphasis. While the adoption of two-word tokens is not without flaws, as it may favor common short phrases lacking meaning, the selective filtering of stopwords and non-emotional words helped mitigate this issue. Consequently, the analysis was not compromised, with only the ambiguous two-word phrase 'oven-ready' remaining. Even this phrase holds Brexit-related significance, referring to Boris Johnson's assertions of an 'oven-ready' Brexit deal. To enhance the clarity and comparability of the word clouds, only the top 50 bigrams were retained, minimizing distractions.
 
 Due to time constraints, a readily available dictionary-based emotional classification model was employed. Although this model demonstrates advancement over others by accounting for negation, such as correctly categorizing "I don't hate Brexit" as anger_negated instead of misclassifying it as anger, it still falls short in identifying nuanced forms of negation like sarcasm. The model encompasses 16 emotions; however, only 7 emotions were chosen for visualization. The remaining 8 emotions represent their negated counterparts, which are challenging to categorize as positive or negative emotions. Additionally, trust was excluded from visualization due to its susceptibility to misclassification. For instance, a sentence like "I'm not quite sure I agree" receives the highest trust score of 1, despite implying uncertainty or trust_negated. Regrettably, removing one-word tokens posed challenges, so they were retained, potentially introducing distortions in the analysis. However, one-word tokens are unlikely to exhibit bias towards any particular emotion and can be considered as random noise. To simplify the analysis and include as many comments as possible, only instances where no emotions were recorded were filtered out. Therefore, it is possible for individual sentences within a comment to have multiple assigned emotions, as it is solely based on the presence of specific dictionary words. For example, the following comment was associated with the emotions trust, disgust, and anger:
 
 "I'm wondering if their support was decided upon because they felt there was no realistic prospect of Corbyn actually pushing for a second vote, which would mean it was another way they could oppose Brexit - which they consider likely to be seriously harmful to Scotland - whilst knowing that if no second vote happened then there's no way any future government in Westminster could plausibly argue for a referendum on any agreed Scottish independence deal and be taken seriously."
 
-## 3.2 Emotional Word Clouds and Classification Implementation: 
+### 3.1.2 Emotional Word Clouds and Classification Implementation
 We initiated the comment preprocessing by tokenizing them into word pairs (bigrams) and arranging them into two separate columns. Subsequently, we eliminated stop words using a dataframe called "stop_words" from the tidytext package and filtered out "non-emotional words" based on their presence in a sentiment dictionary called "sentiment."
 
 ```r
