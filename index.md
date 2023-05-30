@@ -25,9 +25,15 @@ The package also simplifies the data collection process, with just a single comm
 
 # 2.Initial Data Collection 
 
-### 
+### 2
 
-### 
+### 2.2 EDA of Reddit Comments dataframe (df_filtered) which contains "Brexit" 
+Df_filtered has 11765 rows and 7 columns, with dates of comments ranging between 2016-06-24 to 2023-05-14 and an average "score" ( comment upvotes - downvotes) of roughly 22. We can find the default data types using the str command in R, which shows that only the url and comment columns are characters while the remaining 4 columns are numeric. To get a rough understanding of distributions for our relevant numeric variables, we plotted histograms of the date and score variable. It suggests there is a significant positive skew for the score variable making it non-normally distributed, and and that a majority of the comments occurred in 2018-2019 and 2022-2023. However, we decided not to remove score outliers because 
+
+![image](https://github.com/andrewtpei/Sentipedia/assets/124374148/92037c4d-047b-46c3-95ed-9dd0d97b6013)
+
+ 
+
 
 
 # 3. Data Analysis 
