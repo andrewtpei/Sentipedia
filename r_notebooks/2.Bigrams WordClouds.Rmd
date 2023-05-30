@@ -1,11 +1,11 @@
 # **Bigram Network Diagrams**
 ```{r}
-library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(syuzhet); library(gridExtra); library(gridGraphics); library(ggplotify); library(plotly)
+library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(syuzhet); library(gridExtra); library(gridGraphics); library(ggplotify); library(plotly); library(ggwordcloud)
 ```
 
 
 ```{r}
-df_bigrams <- df %>%
+df_bigrams <- df_Brexit %>%
   unnest_tokens(bigram, comment, token = "ngrams", n = 2) %>%
   filter(!is.na(bigram))
 bigrams_separated <- df_bigrams %>% separate(bigram, c("word1", "word2"), sep = " ")
@@ -13,7 +13,7 @@ bigrams_separated <- df_bigrams %>% separate(bigram, c("word1", "word2"), sep = 
 
 ```{r}
 #Cleaning to obtain mostly emotional words
-custom_stopwords <- c("http", "amp", "https", "gt", "xit", "news", "wiki", "makes", "mail")
+custom_stopwords <- c("http", "amp", "https", "gt", "xit", "news", "wiki", "makes", "mail", "brexit")
 bigrams_filtered <- bigrams_separated %>%
   filter(!word1 %in% stop_words$word & !word2 %in% stop_words$word) %>% #uses a stopword dataframe from the tidytext package
   filter(word1 %in% sentiments$word | word2 %in% sentiments$word) %>% 
@@ -32,11 +32,22 @@ bigrams_separated3 <- bigrams_united[(round(n/2) + 1):round(3*n/4), ]
 bigrams_separated4 <- bigrams_united[(round(3*n/4) + 1):n, ]
 ```
 
+#Final Word Cloud Output
+par(mfrow=c(2,2))
+set.seed(123)
+
 ```{r}
 #Emotional bigram wordcloud over time: 
 bicloud1 <- bigrams_separated1 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud2<- bigrams_separated2 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud3 <- bigrams_separated3 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n); bicloud4 <- bigrams_separated4 %>% count(bigram, sort = T) %>% top_n(n = 50, wt = n) #Converting the 4 split bigrams into a wordcloudable format. 
 
-set.seed(123)
-cloud1<- wordcloud2(bicloud1, shape = "circle", fontFamily = "mono"); cloud2<- wordcloud2(bicloud2, shape = "circle", fontFamily = "mono"); cloud3<- wordcloud2(bicloud3, shape = "circle", fontFamily = "mono"); cloud4 <- wordcloud2(bicloud4, shape = "circle", fontFamily = "mono") #Convert into 4 word clouds over time. 
+wordcloud2(bicloud1, shape = "circle", fontFamily = "mono")
+layout(matrix(c(1, 2), nrow=2), heights=c(1, 4))
+par(mar=rep(0, 4))
+plot.new()
+text(x = 0.5, y = 0.5, "2016-2017", cex = 1.5, font = 2)
+
+#Convert into 4 word clouds covering different time periods
+cloud1<- wordcloud2(bicloud1, shape = "circle", fontFamily = "mono"); cloud2<- wordcloud2(bicloud2, shape = "circle", fontFamily = "mono"); cloud3<- wordcloud2(bicloud3, shape = "circle", fontFamily = "mono"); cloud4 <- wordcloud2(bicloud4, shape = "circle", fontFamily = "mono") 
+
 cloud1;cloud2;cloud3;cloud4
 ```

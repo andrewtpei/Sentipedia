@@ -1,5 +1,5 @@
 ```{r}
-#Packages: 
+#Relevant Packages: 
 library(jsonlite);library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(ggthemes); library(syuzhet); library(widyr)
 ```
 
@@ -21,3 +21,15 @@ dim(df_Brexit); summary(df_Brexit); head(df_Brexit)
 filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE)));dim(filtered); summary(filtered)
 dim(filtered); summary(filtered); summary(filtered)
 ```
+
+```{r}
+#News Article Titles over time
+Atop_Brexit_urls1 <- rename(Atop_Brexit_urls, "Reddit Link" = url)
+Brexit_titles_time<- left_join(df_news,Atop_Brexit_urls1, by = "Reddit Link")
+Brexit_titles_timefiltered <- filter(Brexit_titles_time, !is.na(`News Link`) & !is.na(timestamp))
+```
+
+```{r}
+write.csv(Brexit_titles_timefiltered.csv)
+```
+

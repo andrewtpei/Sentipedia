@@ -141,11 +141,55 @@ similarity2 <- ggplotly(similarity1, tooltip = c("text")) %>%
 similarity2
 ```
 
-Graveyard: 
+  summarise(across(everything(), mean, na.rm = TRUE)) #get average percentages for each year. 
+
+score1 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
+  group_by(url, emotion_type) %>% #group by url link (i.e each news article/post) 
+  summarise(Mean_Score = mean(score)) %>% 
+  pivot_wider(names_from = emotion_type, values_from = Mean_Score) %>% #gets data in desired format of where rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated, -disgust_negated, -trust) %>% 
+  mutate(Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% #attaches date of the Brexit url and converts it to date format. the dates should correspond to the correct urls as both Atop_Brexit_url and filteredemotion1 have been arranged from earliest to latest date. 
+  arrange(Date) %>% 
+  group_by(Year) %>% 
+  summarise(across(everything(), mean, na.rm = TRUE)) %>% #get average percentages for each year. 
+  pivot_longer(-c("Date","url", "Year"), names_to = "Emotion", values_to = "Mean Score") 
+head(score1)
+summary(score1)
+ %>% filter(emotion_count > 0)
+   summarise(across(everything(), mean, na.rm = TRUE)) %>% 
+
 ```{r}
-plot1 <- ggplot(emotion2, aes(x = Date, y = Percentage, group = Emotion,text = paste('Emotion:',Emotion,'<br>Percentage',Percentage, '<br>Date:', as.Date(Date))))
-title = "Reddit Emotional Prevalence between 2016-2023", 
-subtitle = "Which emotions dominated Brexit-related reddit discussions over time?"
-   guides(color = guide_legend(nrow = 1))
+articleemotion1 <- Atop_Brexit_urls %>% sentimentr::get_sentences() %>% sentimentr::emotion() 
+articleemotion2 <- articleemotion1 %>% arrange(timestamp) %>% group_by(url, emotion_type) %>% 
+  summarise(Emotion_Percentage = sum(emotion_count)) %>% #group by url link (i.e each news article/post) 
+  pivot_wider(names_from = emotion_type, values_from = Emotion_Percentage) %>% #gets data in desired format of where rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated, -disgust_negated, -trust) %>% 
+  mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
+  arrange(Date) %>% 
+  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
+  group_by(Year) %>% 
 ```
+
+```{r}
+
+emotion3 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
+  group_by(url, emotion_type) %>% #group by url link (i.e each news article) and emotions 
+  summarise(Emotion_Percentage = sum(emotion_count)) %>% 
+  pivot_wider(names_from = emotion_type, values_from = Emotion_Percentage) %>% #rows correspond to each post and columns are counts of each emotion. 
+  mutate(across(everything(), ~ replace_na(., 0))) %>% data.frame() %>% #removes all NA values
+  select(-anger_negated, -fear_negated, -anticipation_negated, -joy_negated, -trust_negated, -sadness_negated, -surprise_negated,-disgust_negated, -trust) %>% #removes selected emotions
+   mutate(rowSum = rowSums(select(.,-url)), Date = as.Date(Atop_Brexit_urls$date_utc), Year = year(Date)) %>% 
+  arrange(Date) %>% 
+  mutate(across(-c("Date","rowSum","url","Year"), ~ (./rowSum*100))) %>% #convert into percentages 
+  group_by(Year) %>% 
+  rename("Reddit Link" = url)
+
+df_onlynews<- left_join(df_news,emotion3,by = "Reddit Link") 
+df filter(!is.na(`News Link`) | !is.na())
+
+```
+
+
 
