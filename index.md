@@ -18,11 +18,18 @@ The package also simplifies the data collection process, with just a single comm
 <img width="1090" alt="image" src="https://github.com/andrewtpei/Sentipedia/assets/124374148/58d1b29d-e46c-457a-83dd-40b9c801cfab">
 
 # 2.Initial Data Collection 
+For our sentiment analysis on Brexit, we utilized the Reddit Extractor tool within RStudio to gather comments specifically related to Brexit from the dedicated Brexit subreddit. From this subreddit, we further scraped the news links associated with the discussions to acquire additional data from various news sources. This multi-layered approach enabled us to collect a comprehensive dataset encompassing both user-generated content and news articles, enhancing the breadth and depth of our analysis on Brexit sentiment.
+### Reddit Comment Data
+Our first data source was the comment section of the Brexit subreddit. For the extraction of data, we used the Reddit Extractor in RStudio, a wrapper for Reddit's API. This enabled us to directly interact with Reddit's API, allowing us to pull relevant data such as user comments, comment timestamps, and upvote ratios. We employed parameters such as time range and comment quantity to fine-tune our data collection process. The collected comments were subsequently stored for further analysis, enabling us to gain insights into the sentiments expressed within the Brexit subreddit on Reddit. 
+### News Article Data
+In our next step, we chose to extract news links connected to the subreddit discussions due to the challenges associated with retrieving older news articles using traditional methods such as News APIs. Given that sentiment analysis on Brexit encompasses a wide temporal range, it becomes increasingly difficult to obtain historical news data through APIs alone.
 
-### 
+We were able to identify news links shared by community members. These news links served as references to access relevant articles published during the time of the discussions. We employed Selenium, to navigate to the identified news links and extract the corresponding URLs. This approach allowed us to circumvent the limitations of traditional News APIs and obtain a broader selection of news articles pertinent to our sentiment analysis.
 
-### 
+by utilizing the newspaper3k package, we downloaded the news articles associated with the extracted news links. This approach ensured that our dataset includes timely and contextually relevant news content, enhancing the comprehensiveness and accuracy of our sentiment analysis on Brexit.
 
+Note that since some subreddits are not linked to a news article, we put “NaN” as the value for these.
+<img width="1090" alt="image" src="https://github.com/andrewtpei/Sentipedia/blob/5961e95e92ac97a509aea7d4eca52d337df6c9ef/Figures/get%20link.png"
 
 # 3. Data Analysis 
 ### 3.1 Method Choice and Reasoning for Emotional Analysis
