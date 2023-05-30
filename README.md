@@ -7,7 +7,7 @@ Project Url: https://andrewtpei.github.io/sentipedia/
 ## Project Contributors
 
 - [Andrew Pei](https://github.com/andrewtpei). _Our python coder for comment sentiment._
-- [Vaibhav Vinod](. _Our writer._
+- [Vaibhav Vinod](https://github.com/vaibhav-vinod). _Our writer._
 - [Vincent Wei](https://github.com/Imafont59). _Our R coder for comment emotional classification._
 - [William Yeung](https://github.com/billyblue1). _Our python coder for newspaper articles._
 
