@@ -1,26 +1,9 @@
----
-title: "📚 Project Title"
-date: 20 March 2023
-date-meta: 20 March 2023
----
+# Sentipedia: Analyzing Sentiment of Brexit Within Reddit and News 
+Hello this is a test
 
-# 🤖 Project Title
+# Motivation
 
-**Team members:** 
+## What is Starcraft II?
+Starcraft II is a real-time military science fiction video game, developed by Blizzard Entertainment for PC and Mac. People win by destroying all of their opponents' buildings. 
 
-- [Member 1]()
-- [Member 2]()
-- [Member 3]()
-
-## 📝 Project Description
-This project investigates sentiment around Brexit. (Description)
-
-## 📊 Data
-
-## 📈 Analysis
-
-## 🖼️ Results
-
-## 🖋️ Conclusions
-
-## 📚 References
+![starcraft2gameplay](https://www.kotaku.com.au/wp-content/uploads/sites/3/2016/03/01/txgs2i1o2eyfarofz8he.gif)
