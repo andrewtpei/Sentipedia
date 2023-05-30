@@ -1,9 +1,11 @@
 ---
 layout: home
-title: Sentipedia - Analyzing Emotions and Sentiment Around Brexit
+title: Sentipedia - Analyzing Emotions and Sentiment Around Brexit 🇬🇧
 ---
 
-Group members: Vaibhav V, Andrew Pei, Vincent Wei, ChakHa Yeung
+Group members: Vaibhav Vinod, Andrew Pei, Vincent Wei, ChakHa Yeung
+
+<br>
 
 # 1. Introduction 
 
@@ -26,12 +28,14 @@ In preparation for our data analysis, it is essential to establish the conclusio
 
 As evidenced by an [article published in The Guardian](https://www.theguardian.com/politics/ng-interactive/2023/jan/30/changing-attitudes-to-brexit-three-years-on), polling averages suggest a growing belief among individuals that the United Kingdom would be better off as a member of the European Union. This trend, which we aim to substantiate through our data analysis, holds significant implications for understanding the evolving sentiment around Brexit. The article also highlights an intriguing observation regarding the resistance to Brexit among individuals born between 1996 and 2004, warranting further exploration and analysis.
 
-Furthermore, our research is influenced by the examination of poll efficacy in capturing public opinion, as discussed in an [article from FiveThirtyEight](https://fivethirtyeight.com/features/nonresponse-bias-ipsos-poll-findings/). Despite the transformative changes in communication methods and the diverse ways people express their views, traditional polling approaches have remained prevalent. To overcome the limitations of conventional polls, we seek to leverage data from social media platforms, particularly Reddit, to gain more nuanced insights into the sentiments of the general public. This approach is motivated by the understanding that certain demographic groups, such as Reddit users within the 18-29 age range, may be underrepresented in traditional polling methods. The real-time engagement and discussions on Reddit also offer an opportunity to observe the influence of key events, speeches, and advertising campaigns on sentiment.
+Furthermore, our research is influenced by the examination of poll efficacy in capturing public opinion, as discussed in an [article from FiveThirtyEight](https://fivethirtyeight.com/features/nonresponse-bias-ipsos-poll-findings/). Despite the transformative changes in communication methods and the diverse ways people express their views, traditional polling approaches have remained prevalent. To overcome the limitations of conventional polls, we seek to leverage data from social media platforms, particularly Reddit, to gain more nuanced insights into the sentiments of the general public. This approach is motivated by the understanding that certain demographic groups, such as Reddit users [within the 18-29 age range](https://thrivemyway.com/reddit-statistics/#:~:text=The%20average%20age%20of%20Reddit,of%20getting%20their%20college%20degrees), may be underrepresented in traditional polling methods. The real-time engagement and discussions on Reddit also offer an opportunity to observe the influence of key events, speeches, and advertising campaigns on sentiment.
 
 In our research methodology, we incorporate the analysis of news articles as a pseudo-control group. Recognizing that news outlets often rely on polling data, we aim to explore potential divergences or similarities between the sentiment reflected in traditional media and that observed on social media platforms. This comparison will enable us to gain a comprehensive understanding of the complex dynamics surrounding Brexit and shed light on the difference between opinions and sentiments on traditional news outlets and social media. 
 
 ## 1.4 Research Design / Project Flow Diagram
-Our project workflow can be summarized in the diagram presented below. To overcome the limitations imposed by Reddit's official API, we utilized an API wrapper called redditExtractoR from the library. This wrapper allowed us to bypass the restrictions and retrieve the desired information and contents of posts. While the number of posts that can be obtained is still limited, redditExtractoR proved to be superior to the default wrapper in terms of extracting the required data.
+Our project workflow can be summarized in the diagram presented below. To overcome the limitations imposed by Reddit's official API, we utilized an API wrapper called [redditExtractoR](https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf) from the library. This wrapper allowed us to bypass the restrictions and retrieve the desired information and contents of posts. While the number of posts that can be obtained is still limited, redditExtractoR proved to be superior to the default wrapper in terms of extracting the required data.
+
+![figure](Figures/Project_Flow.png)
 
 One significant advantage of redditExtractoR is its capability to restrict the query to specific subreddits, ensuring that comments originate exclusively from our target audience of young British redditors. We specifically chose the unitedkingdom subreddit due to its representation of a wider political spectrum compared to other UK politics-related subreddits. Additionally, this subreddit contains a substantial amount of data points from the desired target group, with the majority of its posts consisting of formal news articles. The post titles often serve as news headlines, with the corresponding news article as the post's content. This feature provided us with a large sample of data, streamlining the data collection process by simultaneously extracting both the news articles and the reactions to them.
 
@@ -39,13 +43,15 @@ However, it is important to acknowledge that this method introduces selection bi
 
 The redditExtractoR package simplifies the data collection process, requiring just a single command to extract a comprehensive data frame (top_Brexit_urls) containing the post URL, timestamp, and title text. A second command extracts the post contents into a list of data frames (thread_contents), with the comments indexed in a separate dataframe (df_Brexit). We then filtered for comments that contain the keyword "Brexit," which we will utilize for our subsequent emotional and sentiment analysis.
 
-Following the extraction, both data frames undergo cleaning and wrangling using pandas in Python and the tidyverse package in R. The details of this process will be further elaborated in the cleaning and exploratory data analysis (EDA) section. For subsequent analysis, as described in section 6 with additional justifications provided, we web-scrape the post URLs from the thread_df to obtain the article content. Additionally, the comment_df is preprocessed using tidytext and NLTK to assess both emotions and sentiment.
+Following the extraction, both data frames undergo cleaning and wrangling using pandas in Python and the tidyverse package in R. The details of this process will be further elaborated in the cleaning and exploratory data analysis (EDA) section. For subsequent analysis, as described in section 2 with additional justifications provided, we web-scrape the post URLs from the thread_df to obtain the article content. Additionally, the comment_df is preprocessed using tidytext and NLTK to assess both emotions and sentiment.
 
 The final output of our analysis takes the form of visualizations, including line charts, word clouds, and bar charts, among others. These visualizations provide a comprehensive representation of the findings derived from our data analysis process.
 
-![figure](Figures/Project_Flow.png)
-     
-# 2.Initial Data Collection 
+<br>
+
+# 2. Initial Data Collection 
+## 2.1 Collecting and Cleaning Data 
+### 2.1.1 Reddit Comments Data
 
 Our first data source was the post threads of the united kingdom subreddit. For the extraction of data, we used the Reddit Extractor in RStudio, a wrapper for Reddit's API. This enabled us to directly interact with the Reddit API and bypass some data access limitations, allowing us to easily pull relevant data such as user post title, post url, and upvote to downvote ratios (score). However, there still remains a limit on the number of total posts that can be pulled with if you specify by “top” (229). We ultimately decided against using other parameters, such as “relevant”, because even though it gets more posts (over 900) the overall number of comments is fewer because it pulls lower-engagement posts. It also increases the likelihood of the post not being a news article, which undermines our desired analysis of interacting redditors and news articles. We employed parameters such as time range and subreddit to fine-tune the query for posts. As mentioned in the project flow section, we ultimately choose the unitedkingdom subreddit as it targets a young, but on paper not overly left-wing, online audience. The figure below shows the head of the initial extracted dataframe (Atopbrexiturl) and the code used to obtain the data.  
 
@@ -66,37 +72,73 @@ df_filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_c
 ```
 ![figure](Figures/df_Brexit.png)
 
-
-### News Article Data
+### 2.1.2 News Article Data
 In our next step, we chose to extract news links connected to the subreddit discussions due to the challenges associated with retrieving older news articles using traditional methods such as News APIs. Given that sentiment analysis on Brexit encompasses a wide temporal range, it becomes increasingly difficult to obtain historical news data through APIs alone.
 
-<<<<<<< HEAD
+
 We were able to identify news links shared by community members. These news links served as references to access relevant articles published during the time of the discussions. We employed Selenium, to navigate to the identified news links and extract the corresponding URLs. This approach allowed us to circumvent the limitations of traditional News APIs and obtain a broader selection of news articles pertinent to our sentiment analysis.
 
 by utilizing the newspaper3k package, we downloaded the news articles associated with the extracted news links. This approach ensured that our dataset includes timely and contextually relevant news content, enhancing the comprehensiveness and accuracy of our sentiment analysis on Brexit.
 
 Note that since some subreddits are not linked to a news article, we put “NaN” as the value for these.
 
-## 2.1 EDA of Reddit Post/Threads Dataframe 
-Out of the 229 posts, we discovered around 150 of them contain news articles. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth
+![figure](Figures/get_link.png)
 
-## 2.2 EDA of Reddit Comments Dataframe (df_filtered) which contains "Brexit" 
+Also, some newspaper sources do not allow free access. So, we skipped approximately 10 articles using the try except method.
+
+An example of skipped article
+![figure](Figures/error_example.png)
+
+Our obtained news contents presented us challenges with cleaning the data frame due to the presence of a significant amount of noise from website loading, and in the form of advertisements and unrelated text, such as “Sign up to our free Brexit and beyond email for the latest headlines on what Brexit is meaning for the UK. Since different websites have different types of “unwanted texts” we employed the T5 (Text-To-Text Transfer Transformer) model from the Hugging Face's Transformers library to generate summaries of each news article. The T5 model was trained on a diverse range of internet text and can perform a wide variety of NLP tasks, making it a perfect fit for our purpose.
+We generated the summary with this code:
+
+![figure](Figures/t5.png)
+
+And the returned summary looks something like this:
+“Andrew Grice’s article on how Boris Johnson might approach the next election overlooks the significant danger that nothing will change. if we want to avoid repeating history then we must put Brexit behind us and refuse to fight yesterday’s battles again.”
+
+This approach helped us condense the articles to their core messages and mitigated the noise issue. It allowed us to obtain a dataset with significantly reduced noise, making it ready for further analysis.
+
+One limitation might be summarisation using the T5 model may have resulted in the loss of some contextual nuances. Nevertheless, it provided us with a significantly cleaned dataset, ready for further analysis.
+
+![figure](Figures/before.png)
+![figure](Figures/after.png)
+
+## 2.2 Exploratory Data Analysis of the Two Dataframe (Reddit Comments with Brexit and News Articles)
+### 2.2.1 Initial Data Summary 
 Df_filtered has 11765 rows and 7 columns, with dates of comments ranging between 2016-06-24 to 2023-05-14 and an average "score" ( comment upvotes - downvotes) of roughly 22. We can find the default data types using the str command in R, which shows that only the url and comment columns are characters while the remaining 4 columns are numeric. To get a rough understanding of distributions for our relevant numeric variables, we plotted histograms of the date and score variable. It suggests there is a significant positive skew for the score variable, and and that a majority of the comments occurred in 2018-2019 and 2022-2023. However, we decided not to remove score outliers because engagement in social media platforms tends to be dominated by a small number of posts, so it is not unexpected that the distribution is non-normal. In addition, the score variable is not used as a predictor for emotional classification or sentiment analysis, so most of the results should not be affected. 
 
 ![figure](Figures/Reddit_Comm_Dist.png)
 
+We collected 145 news articles from the reddit links. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth. For this section, we instead decided to play with some frequency diagrams and wordclouds to get an initial perspective on this textual dataset. 
+
+### 2.2.2 Intial Data Visualization 
+
+![figure](Figures/wc_text.png)
+
+![figure](Figures/wc_summaries.png)
+
+The word clouds generated from news texts and news summaries provide consistent insights into the sentiment and key themes surrounding Brexit. In both word clouds, the term "leave" stands out prominently, highlighting the enduring impact of the decision to exit the European Union. The presence of the word "party" in both word clouds suggests the involvement of political parties and their role in shaping the Brexit narrative. Additionally, the word "crisis" in the word cloud for news summaries reflects the persistent challenges and uncertainties associated with Brexit. However, amidst the turmoil, the word "good" emerges, potentially signifying positive aspects or perceived advantages of the situation. Together, these words capture the complexity and multifaceted nature of sentiment and opinions surrounding Brexit, highlighting the ongoing debates and diverse perspectives on this ongoing issue.
+
+![figure](Figures/frequency.png)
+
+The consistency between the two frequency tables further reinforces the prevalent sentiment surrounding Brexit. The fact that the terms "no" and "leave" have the highest frequencies in both tables indicates a common theme of scepticism and a desire for separation from the EU among the news articles that were scraped as a data source. The frequent appearance of "no" suggests resistance or opposition to specific aspects of Brexit, such as proposed policies or negotiation outcomes. This indicates that there are concerns or objections regarding certain elements of the Brexit process. Additionally, the high frequency of "leave" highlights the continued focus on the decision made by the United Kingdom to exit the European Union. It underscores the ongoing discussions and implications associated with this monumental choice. Overall, these consistent results highlight the prevalent sentiments of scepticism, resistance, and attention to the decision to leave the EU in the news articles analysed
+
+
+<br>
+
 # 3. Data Analysis 
-## 3.1 Method Choice and Reasoning for Emotional Analysis
-### 3.1.1 Emotional Word Clouds Method Reasoning: 
-For the word clouds, 2-word tokens were used instead of 1-word ones because it reveals more information about the context under which the phrases were used. For example, in the unigram clouds ‘pretty’ was shown as a common ‘emotional’ word, but it reveals little about the emotional target and is merely an ‘amplifier’ used for emphasis.  Of course, the 2-word case is still flawed in being biased towards common short phrases that also lack meaning, but after selectively filtering out stopwords and non-emotional words it tends to not undermine analysis; only ‘oven-ready’ is left as a vague 2 word-phrase, and even this has some Brexit-related meaning in reference to Boris Johnson’s proclamations of an ‘oven-ready’ Brexit deal. Only the top 50 bigrams were retained so the word clouds are less distracting and more comparable.
+## 3.1 Method and Implementation of Emotional Analysis
+### 3.1.1 Emotional Word Clouds / Emotional Classification Method Reasoning
+In order to extract more contextual information about the phrases used, two-word tokens were utilized instead of one-word tokens for the word clouds. This approach provided a deeper understanding of the specific context in which the phrases were employed. For instance, in the unigram clouds, the term 'pretty' appeared as a common 'emotional' word. However, it conveyed little information about the target of the emotion and merely served as an 'amplifier' for emphasis. While the adoption of two-word tokens is not without flaws, as it may favor common short phrases lacking meaning, the selective filtering of stopwords and non-emotional words helped mitigate this issue. Consequently, the analysis was not compromised, with only the ambiguous two-word phrase 'oven-ready' remaining. Even this phrase holds Brexit-related significance, referring to Boris Johnson's assertions of an 'oven-ready' Brexit deal. To enhance the clarity and comparability of the word clouds, only the top 50 bigrams were retained, minimizing distractions.
 
-### 3.1.2 Emotional Classification Diagrams Method Reasoning: 
-Due to time constraints, an off-the-shelf dictionary-based emotional classification model was used. While this model is more advanced than others by being able to account for some negation - for example, “I don’t hate brexit” will be recorded as anger_negated instead of misclassified as anger -  it still fails to detect more nuanced negation such as sarcasm. It records 16 emotions, but only 7 emotions were kept for visualisation. 8 emotions are just their negated counterparts, which are difficult to categorise as positive or negative emotions, while 1, trust, was excluded because it seems prone to misclassification. For example, “I'm not quite sure I agree.” is assigned the highest trust score of 1, even though it suggests uncertainty/trust_negated. Unfortunately, removing ‘one-worders’ was difficult so they were kept, which could potentially distort the analysis. However, one-worders should not be particularly biased towards any emotion and so would only be ‘random noise’. For simplicity and to keep as many comments as possible, only instances where no emotions were recorded were filtered out, so it is possible for each individual sentence in a comment to have multiple emotions as it is just based on the presence of specific dictionary words. For example, the following comment was tagged with the emotions ‘trust’, ‘disgust’, and ‘anger’: 
+Due to time constraints, a readily available dictionary-based emotional classification model was employed. Although this model demonstrates advancement over others by accounting for negation, such as correctly categorizing "I don't hate Brexit" as anger_negated instead of misclassifying it as anger, it still falls short in identifying nuanced forms of negation like sarcasm. The model encompasses 16 emotions; however, only 7 emotions were chosen for visualization. The remaining 8 emotions represent their negated counterparts, which are challenging to categorize as positive or negative emotions. Additionally, trust was excluded from visualization due to its susceptibility to misclassification. For instance, a sentence like "I'm not quite sure I agree" receives the highest trust score of 1, despite implying uncertainty or trust_negated. Regrettably, removing one-word tokens posed challenges, so they were retained, potentially introducing distortions in the analysis. However, one-word tokens are unlikely to exhibit bias towards any particular emotion and can be considered as random noise. To simplify the analysis and include as many comments as possible, only instances where no emotions were recorded were filtered out. Therefore, it is possible for individual sentences within a comment to have multiple assigned emotions, as it is solely based on the presence of specific dictionary words. For example, the following comment was associated with the emotions trust, disgust, and anger:
 
-_“I'm wondering if their support was decided upon because they felt there was no realistic prospect of Corbyn actually pushing for a second vote which would mean it was another way they could oppose Brexit - which they consider likely to be seriously harmful to Scotland - whilst knowing that if no second vote happened then there's no way any future government in Westminster could plausibly argue for referendum on any agreed Scottish independence deal and be taken seriously.” _
+"I'm wondering if their support was decided upon because they felt there was no realistic prospect of Corbyn actually pushing for a second vote, which would mean it was another way they could oppose Brexit - which they consider likely to be seriously harmful to Scotland - whilst knowing that if no second vote happened then there's no way any future government in Westminster could plausibly argue for a referendum on any agreed Scottish independence deal and be taken seriously."
 
-## 3.2 Emotional Word Clouds and Classification Implementation: 
-We first preprocessed comments by tokenising into word pairs (bigrams) that are separated into two columns, before removing stop words using a dataframe (stop_words) from the tidytext package and ‘non-emotional words’ based on whether it appears in a sentiment dictionary (sentiment).
+### 3.1.2 Emotional Word Clouds and Classification Implementation
+We initiated the comment preprocessing by tokenizing them into word pairs (bigrams) and arranging them into two separate columns. Subsequently, we eliminated stop words using a dataframe called "stop_words" from the tidytext package and filtered out "non-emotional words" based on their presence in a sentiment dictionary called "sentiment."
+
 ```r
 df_bigrams <- df_filtered %>%
   unnest_tokens(bigram, comment, token = "ngrams", n = 2) %>% #tokenised into bigrams 
@@ -112,7 +154,7 @@ bigrams_filtered <- bigrams_separated %>%
 bigrams_united <- bigrams_filtered %>%
   unite(bigram, word1, word2, sep = " ")
 ```
-Preprocess comments by tokenising each comment into individual sentences, before running sentimentr’s off-the-shelf emotion() function to get the recorded number of emotional instances for each sentence in a relatively clean dataframe (emotion1). That dataframe is then filtered to remove instances where 0 emotions were recorded for a particular sentence, before additional tidyverse functions were used to wrangle the data frames into a desired format for visualisation. 
+Next, we preprocessed the comments by tokenizing each comment into individual sentences and utilized sentimentr's off-the-shelf emotion() function to obtain the count of recorded emotions for each sentence. The resulting data was organized in a clean dataframe called "emotion1." Subsequently, we filtered out instances where no emotions were recorded for a particular sentence. Finally, we employed various tidyverse functions to manipulate the dataframes for visualization purposes.
 
 ```r
 emotion1 <- df_filtered %>% sentimentr::get_sentences() %>% sentimentr::emotion() #off the shelf emotional classification
@@ -178,23 +220,27 @@ def get_nouns(tokens):
         return None
 ```
 
+<br>
+
 # 4.Discussion of Results 
 ## 4.1 Emotional Classification Results Analysis
+Based on the sentiment classifier depicted in the aforementioned figure, the frequency of most emotions within comments remained relatively stable, with only minor year-on-year fluctuations of a few percentage points. The rankings of emotions also exhibited limited changes, with disgust being the least commonly expressed emotion and anticipation being the most commonly expressed emotion throughout the analyzed period.
 
-According to the sentiment classifier as shown in the figure above, the frequency of most emotions within comments remained somewhat constant, with fluctuations occurring only by a few percentage points YoY. There are limited changes in the relative rankings, with disgust being the least common and anticipation being the most common expressed emotion throughout the period. 
-However, it is clear the ‘negative’ emotions of fear, anger, and disgust surpassed the ‘positive’ emotions of joy and anticipation, with the disparity gradually increasing over time. However, the dominance of negative emotions is probably understated; the simple dictionary-based sentiment classifier is unlikely to detect sarcasm, which in a social media context tends to employ positive words to describe a negative situation as noted by Riloff et al (2013) on twitter comments. Nevertheless, the diagram does paint a rough picture of the emotional distribution, which suggests negative emotions are becoming increasingly more prevalent compared to positive emotions. 
+However, it is evident that the "negative" emotions of fear, anger, and disgust surpassed the "positive" emotions of joy and anticipation, with the gap gradually widening over time. It should be noted, though, that the prevalence of negative emotions might be underestimated. The employed simple dictionary-based sentiment classifier is unlikely to detect sarcasm, which, in a social media context, often employs positive words to describe negative situations, as highlighted by Riloff et al. (2013) in their analysis of Twitter comments. Nevertheless, the diagram provides a rough overview of the emotional distribution, suggesting that negative emotions are becoming increasingly more prominent compared to positive emotions.
 
 ![figure](Figures/Reddit_Score_Associations.png)
 
-The second diagram below shows the mean scores associated with most emotions fluctuated over time but remained relatively similar to each other for most of the time period. Its results reinforces the idea that there was some misclassification, because comments received a similar score despite negative emotions being prominent; one might expect the more positive emotions to have noticeably lower scores. However, a conspicuous exception is disgust, which was associated with an increasingly higher score compared to all other emotion despite being the least common emotion as shown in the previous diagram. 
+The second diagram, presented below, illustrates that the mean scores associated with most emotions fluctuated over time but remained relatively similar to each other for the majority of the analyzed period. This finding reinforces the notion that there might have been some misclassification, as comments received similar scores despite the prominence of negative emotions. One would expect the more positive emotions to have noticeably lower scores. However, a notable exception is disgust, which exhibited an increasingly higher score compared to all other emotions, despite being the least common emotion according to the previous diagram.
 
-The strong correlation between disgust and high scores suggests it was a less ‘controversial’ emotion - people have a universal distaste for the Brexit aftermath - compared to other emotions such as anger which could be perceived as misdirected. This in turn implies the correlation might be due to disgust comments being biased towards discussing less contentious topics. However, the figure below probably disproves this- general and disgust comments share over 40 out of the 50 most common non-emotional words, with almost no differences in the log percentage usage rate between shared words. Therefore, the results imply it is the feeling conveyed rather than the topics discussed that increased the average scores of disgust-conveying comments, thus making it a significant component over time. 
+The strong correlation between disgust and high scores suggests that it was a less "controversial" emotion. It appears that people universally shared a distaste for the aftermath of Brexit, which might have contributed to this correlation. On the other hand, other emotions such as anger could be perceived as misdirected in some instances. This implies that the correlation observed could be attributed to disgust comments being biased towards discussing less contentious topics. However, the figure presented below disproves this assumption. It shows that general comments and disgust comments share over 40 out of the 50 most commonly used non-emotional words, with minimal differences in the log percentage usage rate between these shared words. Therefore, the results suggest that it is the feeling conveyed rather than the topics discussed that led to increased average scores of comments conveying disgust, making it a significant component over time. 
 
 ![figure](Figures/Word_Similarity_Diagram.png)
 
 ![figure](Figures/2016-2023_WordClouds.png) 
 
-Finally, the emotional word clouds contain bigrams on Brexit-focussed topics such as project fear, the driver shortage, and free movement, but also expand over time to the discussion of wider topics such as ‘rich people’, ‘cheap labour’, and ‘hedge funds’ and more emotional descriptors such as f-ing stupid and stupid people. The frequency of phrases such as revoke a50, the law passed to exit the EU, reflects the left-wing affiliation of redditors in the unitedkingdom subreddit. When combined with the discussion of right-wing oriented topics such as project fear and the conservative party and the derogatory descriptors, it suggests a significant portion of the reddit discussion has turned into a blame game of ‘stupid people’ who voted leave. However, this is difficult to prove with only word clouds - perhaps a well-thought-out network diagram can do a better job of confirming this theory. This theory does corroborate with the existing Brexit polling and studies, which shows nearly half of voters felt disgust towards people who voted differently from them in the Brexit referendum. 
+The emotional word clouds provided encompass various bigrams related to Brexit-focused topics such as project fear, the driver shortage, and free movement. However, over time, the discussion expands to encompass broader topics such as 'rich people,' 'cheap labor,' 'hedge funds,' as well as more emotionally charged descriptors like 'f-ing stupid' and 'stupid people.' The frequency of phrases such as 'revoke A50' (referring to the Article 50 process of leaving the EU) reflects the left-wing affiliation of redditors in the unitedkingdom subreddit.
+
+When combined with discussions of right-wing oriented topics like project fear and the Conservative Party, as well as the use of derogatory descriptors, it suggests that a significant portion of the Reddit discussion has turned into a blame game targeting 'stupid people' who voted to leave the EU. However, it is challenging to conclusively prove this theory based solely on word clouds. Perhaps a well-thought-out network diagram could provide better evidence to confirm this hypothesis. It is worth noting that this theory aligns with existing Brexit polling and studies, which indicate that nearly [half](https://www.independent.co.uk/news/uk/brexit-latest-news-half-uk-voters-electorate-disgust-other-side-opposite-eu-european-union-lse-study-research-a7535566.html) of voters felt disgust towards individuals who voted differently from them in the Brexit referendum.
 
 ## 4.2 Sentiment Analysis Results 
 Based on the data presented below on sentiment around Brexit over time for different sources, a noticeable decline in sentiment concerning Brexit becomes evident. Specifically, sentiment pertaining to Brexit has shifted towards negative territory in the case of new articles, while remaining relatively neutral in the context of both Reddit comments discussing Brexit and Reddit comments explicitly mentioning the term "Brexit." This alignment supports the findings of conventional surveys and polls, indicating an increase in the percentage of individuals perceiving Brexit as a mistake. However, it is worth noting that Reddit primarily attracts users within the 18-29 age range, as established earlier. Consequently, the conclusion suggesting neutrality among young people on Reddit appears to deviate from the traditional polling findings that indicate animosity towards Brexit among this demographic. These figures also imply that the media, as reflected by opinions expressed in news articles, tends to adopt a more critical stance compared to the general public, represented by Reddit comments, when addressing contemporary issues. Furthermore, when examining the average sentiment over time, it becomes apparent that the average sentiment of young individuals on Reddit regarding Brexit aligns closely with that of the overall population. This observation suggests that the sentiments expressed by young Reddit users concerning Brexit closely mirror those of the wider populace. 
@@ -217,23 +263,31 @@ By examining the nouns associated with positive comments and news articles conce
 
 However, it is important to recognize the limitations inherent in analyzing common nouns associated with Brexit. When considering nouns associated with both positive and negative aspects of Brexit, we observe a striking similarity, providing limited direct insight into the distinctions between these two aspects. This lack of differentiation may arise due to the sheer quantity of data analyzed, as key aspects of Brexit could potentially be overshadowed by the prevalence of high-frequency words.
 
+<br>
 
 # 5.Conclusion 
 
-In conclusion, we were able to use a variety of data analysis methods to investigate the sentiment expressed by Reddit comments surrounding Brexit. We were able to answer our motivating question, is it true that people disagree with Brexit more and more through emotional classification. Negative emotions seemed to increase over time, specifically fear, anger and disgust. We feel like the true increase in negative sentiment may be understated by our difficulty classifying sarcasm as negative emotion.
+In conclusion, our research employed various data analysis methods to investigate the sentiment expressed in Reddit comments regarding Brexit. Through emotional classification and sentiment analysis, we were able to address our initial question concerning the evolving opinions towards Brexit. The findings revealed an increasing prevalence of negative emotions over time, particularly fear, anger, and disgust. Furthermore, the sentiment expressed in Reddit comments demonstrated a shift towards the negative, deviating from traditional polling results. However, it is important to acknowledge that the true extent of negative sentiment may be underestimated due to challenges in accurately classifying sarcasm as a negative emotion and the generalized approach utilized for sentiment estimation.
+In general, polls appeared to reasonably reflect public opinion and justified their continued usage. However, they seemed to inadequately capture the sentiment of the younger generation, particularly in contrast to the sentiment observed in our previous analysis. This raises questions about the effectiveness of polls as a new generation matures and their perspectives become more influential.
 
-We also gained insight into whether there were differences in sentiment surrounding Brexit in the news compared to social media. We found that news articles were more critical of Brexit in comparison to public opinion, especially over time as sentiment in news articles declined much more steeply over time in comparison to sentiment in Reddit comments.
+Moreover, our analysis shed light on the disparity in sentiment between news articles and social media discussions concerning Brexit. The study revealed that news articles tended to adopt a more critical stance towards Brexit compared to public opinion, especially as sentiment in news articles exhibited a more pronounced decline over time than sentiment in Reddit comments. Furthermore, negative opinions expressed by young people on the internet often relied on generalizations, while negative news articles adopted a more specific and nuanced approach.
 
-In order to develop our research further, and if we had more time, we could have tried to develop our own emotional classification model with the goal of being more tailored to the topic of Brexit and perhaps able to detect sarcasm more effectively. Additionally, we could have zoomed into specific events, such as key speeches or ad campaigns. This would allow us to analyse the impact they had on sentiment, which could prove to be a useful tool to politicians as they try and decide where they allocate their campaign resources.
+It is important to note that our research had certain limitations. The challenges in accurately classifying sarcasm as a negative emotion, as well as the generalized approach used for sentiment estimation, may have influenced the overall findings. Additionally, the analysis focused on sentiment expressed on Reddit and news articles, and thus, the results may not be fully representative of the entire population's sentiment towards Brexit.
 
-Furthermore, sentiment analysis like this could have wider implications as they give us different insights into what people are thinking. Many financial institutions such as the Bank of England spend vast amounts of money trying to predict people's expectations of key parameters like inflation, which they use to help set the interest rate. If data analysis methods like the ones we used can be used to create more accurate forecasts, this could have real-world benefits in the form of reduced unemployment and increased economic growth.
+Further research could explore alternative methods to address the challenges associated with sarcasm detection and refine sentiment analysis techniques. Additionally, investigating the reasons behind the disparity between young people's sentiment and traditional polling results could provide valuable insights into the changing dynamics of public opinion. Overall, our research contributes to a better understanding of sentiment dynamics surrounding Brexit and highlights the complexities involved in capturing and interpreting public sentiment in the digital age.
+
+<br>
 
 # 6. Footnotes
 
-https://aclanthology.org/D13-1066.pdf 
-https://www.theguardian.com/politics/ng-interactive/2023/jan/30/changing-attitudes-to-brexit-three-years-on)
-https://fivethirtyeight.com/features/nonresponse-bias-ipsos-poll-findings/
- 
+* https://aclanthology.org/D13-1066.pdf 
+* https://www.theguardian.com/politics/ng-interactive/2023/jan/30/changing-attitudes-to-brexit-three-years-on)
+* https://fivethirtyeight.com/features/nonresponse-bias-ipsos-poll-findings/
+* https://thrivemyway.com/reddit-statistics/#:~:text=The%20average%20age%20of%20Reddit,of%20getting%20their%20college%20degrees
+* https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
+
+<br>
+
 # 7. Contributions Table
 ![figure](Figures/Contributions.png)
 
