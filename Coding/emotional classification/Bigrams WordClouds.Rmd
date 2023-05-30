@@ -1,5 +1,5 @@
 ```{r}
-library(RedditExtractoR);library(tidyverse);library(tidytext); library(wordcloud2); library(textdata); library(gridExtra); library(gridGraphics); library(ggplotify); library(plotly)
+library(RedditExtractoR);library(tidyverse);library(tidytext); library(wordcloud2); library(textdata); library(plotly)
 ```
 
 ```{r}
