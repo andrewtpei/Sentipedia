@@ -1,4 +1,4 @@
-our website: [[https://andrewtpei.github.io/sentipedia/]
+our website: [https://andrewtpei.github.io/sentipedia/]
 # Brexit Emotions and Sentiment Dashboard
 
 This project explores the emotions and average sentiment of Brexit using R and Python. 
