@@ -1,6 +1,6 @@
 ```{r}
 #Relevant Packages: 
-library(jsonlite);library(RedditExtractoR);library(tidyverse);library(purrr);library(tidytext); library(wordcloud2); library(textdata); library(ggthemes); library(syuzhet); library(widyr)
+library(jsonlite);library(RedditExtractoR);library(tidyverse); library(tidytext); library(wordcloud2); library(textdata); library(widyr)
 ```
 
 OBTAINING AND FILTERING DATA: 
