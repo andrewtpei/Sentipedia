@@ -51,7 +51,7 @@ We were able to identify news links shared by community members. These news link
 by utilizing the newspaper3k package, we downloaded the news articles associated with the extracted news links. This approach ensured that our dataset includes timely and contextually relevant news content, enhancing the comprehensiveness and accuracy of our sentiment analysis on Brexit.
 
 Note that since some subreddits are not linked to a news article, we put “NaN” as the value for these.
-<img width="1090" alt="image" src="https://github.com/andrewtpei/Sentipedia/blob/5961e95e92ac97a509aea7d4eca52d337df6c9ef/Figures/get%20link.png"
+
 =======
 ## 2.1 EDA of Reddit Post/Threads Dataframe 
 Out of the 229 posts, we discovered around 150 of them contain news articles. For the subreddit posts that did not link to a news article, we removed them and replaced them with NaN so that they can be filtered out in later analysis. It was difficult to uncover any distributions for the news data frame because it was all qualitative character data types - the comments_df contains some quantitative distributions so the distributions will be discussed more in depth
