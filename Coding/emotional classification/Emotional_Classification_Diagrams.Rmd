@@ -1,5 +1,5 @@
 ```{r}
-library(RedditExtractoR);library(tidyverse);library(tidytext); library(wordcloud2); library(textdata); library(lubridate); library(ggrepel); library(directlabels); library(ggthemes); library(sentimentr); library(gridExtra); library(plotly); library(scales); 
+library(RedditExtractoR);library(tidyverse);library(tidytext); library(wordcloud2); library(textdata); library(lubridate); library(ggrepel); library(directlabels); library(ggthemes); library(sentimentr); library(gridExtra); library(plotly); library(scales); library(htmlwidgets)
 ```
 
 ```{r}
@@ -42,6 +42,7 @@ plot2 <- ggplotly(plot1, tooltip = c("y", "group"), style = ggplot2) %>%
          yaxis = list(title = "Emotion Frequency Percentage (%)")) %>% 
   config(displayModeBar = FALSE)
 plot2
+saveWidget(plot2, "plot2.html")
 ```
 
 ```{r}
@@ -73,6 +74,7 @@ scoreplot2 <- ggplotly(scoreplot1, tooltip = c("y","group"), style = ggplot2) %>
          yaxis = list(title = "Mean Score Associated with each emotion")) %>% 
   config(displayModeBar = FALSE) # put legend in center of x-axis 
 scoreplot2
+saveWidget(scoreplot2, "scoreplot2.html")
 ```
 
 What are the disgust-related topics discussing?  

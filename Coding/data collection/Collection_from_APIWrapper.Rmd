@@ -16,9 +16,10 @@ threads_contents <- get_thread_content(Atop_Brexit_urls$url)
 ```{r}
 #Indexing of df_Brexit (comments dataframe) and filtering to get df_filtered, which is a column that only discusses Brexit. 
 df_Brexit <- threads_contents[["comments"]] %>% select(-c("author", "upvotes", "downvotes")) %>% filter(!str_detect(comment, regex("deleted", ignore_case = TRUE)))
+df_filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE)))
+
 dim(df_Brexit); summary(df_Brexit); head(df_Brexit)
-df_filtered <- df_Brexit %>% filter(str_detect(comment, regex("Brexit", ignore_case = TRUE)));dim(filtered); summary(filtered)
-dim(df_filtered); summary(df_filtered); dim(df_Brexit); summary(df_Brexit)
+dim(df_filtered); summary(df_filtered); dim(df_filtered); summary(df_filtered); dim(df_Brexit); summary(df_Brexit)
 ```
 
 ```{r}
