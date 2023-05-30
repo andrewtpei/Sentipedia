@@ -7,7 +7,6 @@ library(jsonlite);library(RedditExtractoR);library(tidyverse);library(purrr);lib
 emotion1 <- filtered %>% sentimentr::get_sentences() %>% sentimentr::emotion()
 ```
 
-group_by(Year) %>% top_n(3, rowSum) %>% ungroup() %>% Date = as.Date(Atop_Brexit_urls$date_utc)
 ```{r}
 #Time Graph of Emotions
 emotion2 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% #only keep instances where an emotion count was recorded for a comment
@@ -25,10 +24,7 @@ emotion2 <- emotion1 %>% dplyr::filter(emotion_count > 0) %>% arrange(date) %>% 
 head(emotion2)
 summary(emotion2)
 ```
-plot1 <- ggplot(emotion2, aes(x = Date, y = Percentage, group = Emotion,text = paste('Emotion:',Emotion,'<br>Percentage',Percentage, '<br>Date:', as.Date(Date))))
-title = "Reddit Emotional Prevalence between 2016-2023", 
-subtitle = "Which emotions dominated Brexit-related reddit discussions over time?"
-   guides(color = guide_legend(nrow = 1))
+
 
 ```{r}
 #GGplot
@@ -109,6 +105,7 @@ frequency <- bind_rows(mutate(disgust1, source = "disgust"),
                        mutate(gen1, source = "general")) %>% 
   pivot_wider(names_from = source, values_from = percentage) %>% 
   filter(!is.na(disgust) & !is.na(general))
+dim(frequency); summary(frequency)
 ```
 
 
@@ -124,18 +121,31 @@ similarity1 <- ggplot(frequency, aes(x = general, y = `disgust`, color = abs(`di
   geom_point(aes(text = paste(
     "Word:", word,    
     "\nLog % Diff:", frequency$disgust - frequency$general)), alpha = 0) + 
-  scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
+  scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75", guide = "none") +
   theme(legend.position = "none") +
   scale_x_log10(labels = percent_format()) +
   scale_y_log10(labels = percent_format()) +
-  labs(y = "Disgust Comment Word Prevalence, log (%)", x = "General Comment Word Prevalence, log (%)")
+  ylab("Disgust Comment Word Prevalence, log (%)") + 
+  xlab("General Comment Word Prevalence, log (%)") +
+  theme_fivethirtyeight()
 
 # Convert the modified ggplot to a Plotly object
 similarity2 <- ggplotly(similarity1, tooltip = c("text")) %>%
-  layout(title = list(text = "How similar are disgust-expressing comments to general comments?"), margin = list(t = 50)) %>%
-  config(displayModeBar = FALSE)
+  layout(title = list(text = "How similar are the words in disgust-expressing comments to all other comments?"), 
+         xaxis = list(title = "General Comment Word Prevalence, log (%)"),
+         yaxis = list(title = "Disgust Comment Word Prevalence, log (%)"), margin = list(t= 50)) %>%
+  config(displayModeBar = FALSE) %>% 
+  layout(showlegend = FALSE)
 
 # Display the plot
 similarity2
+```
+
+Graveyard: 
+```{r}
+plot1 <- ggplot(emotion2, aes(x = Date, y = Percentage, group = Emotion,text = paste('Emotion:',Emotion,'<br>Percentage',Percentage, '<br>Date:', as.Date(Date))))
+title = "Reddit Emotional Prevalence between 2016-2023", 
+subtitle = "Which emotions dominated Brexit-related reddit discussions over time?"
+   guides(color = guide_legend(nrow = 1))
 ```
 
