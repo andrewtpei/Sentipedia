@@ -2,7 +2,7 @@
 
 This project explores the emotions and average sentiment of Brexit using R and Python.
 
-Project Url: https://andrewtpei.github.io/sentipedia/
+Project Url: https://andrewtpei.github.io/Sentipedia/
 
 ## Project Contributors
 
